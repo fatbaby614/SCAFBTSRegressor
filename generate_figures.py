@@ -33,7 +33,7 @@ plt.rcParams.update({
 })
 
 CH_NAMES = ['FT7','FT8','T7','T8','TP7','TP8',
-            'CP1','CPZ','CP2','P1','PZ','P2',
+            'CP1','CP2','P1','PZ','P2',
             'PO3','POZ','PO4','O1','OZ','O2']
 
 BAND_LABELS = ['Delta', 'Theta', 'Alpha', 'Beta', 'Gamma']
@@ -62,7 +62,7 @@ def draw_prediction_curves():
         (idx_worst, 'Worst', 'red'),
     ]
 
-    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
     for ax, (idx, label, color) in zip(axes, selected):
         y_t = y_true_all[idx]
         y_p = y_pred_all[idx]
@@ -72,16 +72,17 @@ def draw_prediction_curves():
         ax.plot(y_t, 'k-', alpha=0.4, linewidth=0.8, label='Ground Truth (PERCLOS)')
         ax.plot(y_p_smooth, color=color, linewidth=1.2, label=f'Predicted (COR={c_val:.3f})')
         ax.set_ylabel('PERCLOS')
-        ax.set_title(f'{label}: Subject {subjects[idx][:15]} (COR={c_val:.3f})')
-        ax.legend(loc='upper left', bbox_to_anchor=(0, 1.08), ncol=2,
+        ax.set_title(f'{label}: Subject {subjects[idx][:15]} (COR={c_val:.3f})', pad=25)
+        ax.legend(loc='upper left', bbox_to_anchor=(0, 0.98), ncol=2,
                   frameon=False, borderaxespad=0)
         ax.set_ylim(-0.1, 1.1)
 
     axes[-1].set_xlabel('Epoch (8s windows)')
-    fig.suptitle('FBTS+EOG: Predicted vs Ground Truth Vigilance', fontsize=14, y=1.02)
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
-    path = os.path.join(OUTPUT, 'fig_prediction_curves.pdf')
-    fig.savefig(path)
+    fig.suptitle('FBTS+EOG: Predicted vs Ground Truth Vigilance', fontsize=14, y=0.99)
+    plt.subplots_adjust(hspace=0.6)
+    plt.tight_layout(rect=[0, 0, 1, 0.98])
+    path = os.path.join(OUTPUT, 'fig_prediction_curves.png')
+    fig.savefig(path, format='png')
     plt.close()
     print(f"  Saved: {path}")
 
@@ -114,8 +115,8 @@ def draw_scatter():
     ax.set_aspect('equal')
 
     plt.tight_layout()
-    path = os.path.join(OUTPUT, 'fig_scatter.pdf')
-    fig.savefig(path)
+    path = os.path.join(OUTPUT, 'fig_scatter.png')
+    fig.savefig(path, format='png')
     plt.close()
     print(f"  Saved: {path}")
 
@@ -146,8 +147,8 @@ def draw_heatmap():
 
     fig.suptitle('Channel x Frequency Band DE Features: Alert vs Drowsy', fontsize=13)
     plt.tight_layout()
-    path = os.path.join(OUTPUT, 'fig_heatmap.pdf')
-    fig.savefig(path)
+    path = os.path.join(OUTPUT, 'fig_heatmap.png')
+    fig.savefig(path, format='png')
     plt.close()
     print(f"  Saved: {path}")
 
@@ -243,8 +244,8 @@ def draw_ablation():
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout(rect=[0.02, 0.02, 0.98, 0.93])
-    path = os.path.join(OUTPUT, 'fig_ablation_nfeatures.pdf')
-    fig.savefig(path)
+    path = os.path.join(OUTPUT, 'fig_ablation_nfeatures.png')
+    fig.savefig(path, format='png')
     plt.close()
     print(f"  Saved: {path}")
 

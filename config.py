@@ -14,7 +14,7 @@ if platform.system() == 'Linux':
     DROZY_ROOT    = '/mnt/data1/home/tanhuang/datasets/DROZY'
     SEED_ROOT     = '/mnt/data1/home/tanhuang/datasets/SEED'
 else:
-    SEED_VIG_ROOT = r'D:\EEG\datasets\SEED-VIG'
+    SEED_VIG_ROOT = r'F:\EEGDatasets\SEED-VIG'
     DROZY_ROOT    = r'D:\EEG\datasets\DROZY'
     SEED_ROOT     = r'D:\EEG\datasets\SEED'
 

@@ -12,7 +12,7 @@
 
 \title{Riemannian Filter Bank Tangent Space Features for EEG-Based Vigilance Estimation with Multimodal Fusion}
 
-\author{Xiangzhu Li$^{1}$\orcid{0009-0002-4157-6201}, Huang Tan$^{2}$\orcid{0009-0002-7101-6731} and Li Zhang$^{1,*}$\orcid{0000-0000-0000-0000}}
+\author{Xiangzhu Li$^{1}$\orcid{0009-0002-4157-6201}, Huang Tan$^{2}$\orcid{0009-0002-7101-6731} and Li Zhang$^{1,*}$\orcid{0000-0000-0000-0000}\textsuperscript{\textbf{[TO FILL]}}}
 
 \affil{$^1$Shenzhen Hospital of Integrated Traditional Chinese and Western Medicine, Guangzhou University of Chinese Medicine, Shenzhen 518104, China}
 \affil{$^2$University of Electronic Science and Technology of China, Chengdu 611731, China}
@@ -272,11 +272,11 @@ DE + SVR             & 17 & -- & 0.536 & 0.272 \\
 \label{tab:loso}
 \end{table}
 
-Table~\ref{tab:loso} presents LOSO results. Three findings stand out. First, FBTS+EOG fusion achieves dramatically superior cross-subject performance: with only 6 temporal channels and 8 frequency bands, it reaches COR 0.835---a 34\% improvement over the within-subject DE baseline (0.521) and the strongest result in this study. This exceptional gain demonstrates that the combination of Riemannian cross-subject alignment and ocular complementarity is multiplicative rather than additive. Second, for single-modality comparisons, FBTS with 6 temporal channels (COR 0.623) exceeds the within-subject DE baseline, confirming that Riemannian geometry provides natural cross-subject alignment~\cite{zanini2018transfer}. Third, Ridge regression substantially outperforms SVR ($+0.04$--$0.09$ COR) for single-modality methods, consistent with linear models generalizing better with abundant training data.
+Table~\ref{tab:loso} presents LOSO results. Three findings stand out. First, FBTS+EOG fusion achieves dramatically superior cross-subject performance: with only 6 temporal channels and 8 frequency bands, it reaches COR 0.835---a 34\% improvement over the within-subject DE baseline (0.521) and the strongest result in this study. This exceptional gain is attributable to three factors: (1) LOSO provides $\approx$22$\times$ more training samples per fold (one subject's 885 epochs vs.\ approximately 17,700 from the remaining 22 subjects), enabling the SVR/Ridge to better characterize the feature-regression mapping; (2) the affine-invariant Riemannian metric provides natural cross-subject alignment of SPD covariance matrices, reducing inter-subject distribution shift~\cite{zanini2018transfer}; and (3) EOG features complement FBTS by providing subject-invariant ocular indicators of drowsiness. Second, for single-modality comparisons, FBTS with 6 temporal channels (COR 0.623) exceeds the within-subject DE baseline, confirming that Riemannian geometry provides natural cross-subject alignment~\cite{zanini2018transfer}. Third, Ridge regression substantially outperforms SVR ($+0.04$--$0.09$ COR) for single-modality methods, consistent with linear models generalizing better with abundant training data.
 
 \subsection{Cross-Dataset Validation on SEED}
 
-To validate cross-dataset generality, we apply the DE and PSD baselines to the SEED emotion dataset~\cite{zheng2015investigating} (15 subjects $\times$ 3 sessions, 62-channel EEG, 5 frequency bands, 15 film clips per session). DE with SVC achieves 86.1\% three-class accuracy (F1=0.846), while PSD achieves 81.5\%, confirming DE's effectiveness across vigilance (regression) and emotion (classification) domains. As an initial Riemannian validation under computational constraints, we evaluate FBTS on a 10-channel frontal subset (FP1, FPZ, FP2, AF3, AF4, F7, F5, F3, F1, FZ; 5-band filter bank, Riemannian tangent space, SVC). FBTS achieves 55.8\% accuracy (F1=0.504) with 5 bands and 52.9\% (F1=0.477) with 8 bands---below the DE baseline but expected given the tenfold channel reduction (10 vs.\ 62) and the spatial nature of emotion-related EEG patterns that rely on distributed cortical activations. Full 62-channel FBTS evaluation remains a computational target; efficient SPD approximations for high-density montages are left as future work. The identical DE evaluation protocol applied to both datasets establishes cross-dataset compatibility.
+To validate cross-dataset generality, we apply the DE and PSD baselines to the SEED emotion dataset~\cite{zheng2015investigating} (15 subjects $\times$ 3 sessions, 62-channel EEG, 5 frequency bands, 15 film clips per session). DE with SVC achieves 86.1\% three-class accuracy (F1=0.846), while PSD achieves 81.5\%, confirming DE's effectiveness across vigilance (regression) and emotion (classification) domains. As a preliminary Riemannian validation under computational constraints, we evaluate FBTS on a 10-channel frontal subset (FP1, FPZ, FP2, AF3, AF4, F7, F5, F3, F1, FZ; 5-band filter bank, Riemannian tangent space, SVC). FBTS achieves 55.8\% accuracy (F1=0.504) with 5 bands and 52.9\% (F1=0.477) with 8 bands---below the DE baseline. This performance gap is expected for two reasons: (1) the tenfold channel reduction (10 vs.\ 62) dramatically reduces the covariance matrix rank and the information content of tangent space features; and (2) emotion-related EEG patterns rely on distributed cortical activations across parietal and occipital regions that are not captured by the frontal subset. This preliminary evaluation demonstrates the feasibility of Riemannian features on SEED but does not represent the full potential of FBTS on this dataset. Full 62-channel FBTS evaluation remains a computational target requiring GPU acceleration or SPD matrix approximations; efficient strategies for high-density montages are left as future work. The identical DE evaluation protocol applied to both datasets establishes cross-dataset compatibility.
 
 \subsection{Validation on DROZY}
 
@@ -381,11 +381,15 @@ This paper presents the first systematic evaluation of Riemannian filter bank ta
 
 \ack{The authors thank the BCML laboratory at Shanghai Jiao Tong University for making the SEED-VIG dataset publicly available.}
 
-\funding{This work was supported in part by the National Natural Science Foundation of China under Grant XXXXXX, and the Shenzhen Science and Technology Program under Grant XXXXXX.}
+\ethics{All experiments were performed in accordance with the Declaration of Helsinki. The SEED-VIG study was approved by the Ethics Committee of Shanghai Jiao Tong University, and written informed consent was obtained from all participants prior to the experiments. The SEED dataset was approved by the Ethics Committee of Shanghai Jiao Tong University. The DROZY study was approved by the Ethics Committee of University of Liège. All data were anonymized before release.}
+
+\funding{This work was supported in part by the National Natural Science Foundation of China under Grant \textbf{[TO FILL]}, and the Shenzhen Science and Technology Program under Grant \textbf{[TO FILL]}.}
+
+\competing interests{The authors declare no competing financial interest.}
 
 \roles{X Li contributed to the conceptualization, methodology, and writing of the original draft. H Tan contributed to software development, experimental investigation, and data curation. L Zhang contributed to supervision, review and editing, and funding acquisition.}
 
-\data{The SEED-VIG and SEED datasets are available at \url{http://bcmi.sjtu.edu.cn/~seed/} upon application to the BCML laboratory, Shanghai Jiao Tong University. The DROZY dataset is available at \url{http://www.drozy.ulg.ac.be/} upon license agreement. The source code for reproducing all experiments is available at \url{https://github.com/xxxxxx/SCAFBTSRegressor}.}
+\data{The SEED-VIG and SEED datasets are available at \url{http://bcmi.sjtu.edu.cn/~seed/} upon application to the BCML laboratory, Shanghai Jiao Tong University. The DROZY dataset is available at \url{http://www.drozy.ulg.ac.be/} upon license agreement. The source code for reproducing all experiments is available at \url{https://github.com/fatbaby614/SCAFBTSRegressor}.}
 
 % =================================================================
 

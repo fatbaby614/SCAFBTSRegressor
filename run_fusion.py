@@ -220,13 +220,6 @@ def get_fusion_configs():
                     dict(type='de', channels=ch, ftype='de_LDS'),
                     dict(type='riemann', channels=ch, bands=b),
                 ], n_features=200))
-            # DE + EOG
-            cfgs.append(dict(
-                name=f'DE+EOG_{ch[:6]}',
-                features=[
-                    dict(type='de', channels=ch, ftype='de_LDS'),
-                    dict(type='eog'),
-                ], n_features=200))
             # Riemannian + EOG
             cfgs.append(dict(
                 name=f'Riem+EOG_{b}_{ch[:6]}',
@@ -234,6 +227,15 @@ def get_fusion_configs():
                     dict(type='riemann', channels=ch, bands=b),
                     dict(type='eog'),
                 ], n_features=200))
+
+    # DE + EOG (不使用频带, 移出循环避免重复)
+    for ch in ['all', 'temporal']:
+        cfgs.append(dict(
+            name=f'DE+EOG_{ch[:6]}',
+            features=[
+                dict(type='de', channels=ch, ftype='de_LDS'),
+                dict(type='eog'),
+            ], n_features=200))
 
     # ── 三模态融合 ──────────────────────────────────────
     for ch in ['all', 'temporal']:
