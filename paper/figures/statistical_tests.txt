@@ -1,0 +1,28 @@
+
+FBTS+EOG vs DE+EOG (17ch):
+  Riem+EOG_5band_all: 0.6182 +/- 0.1908
+  DE+EOG_all: 0.5857 +/- 0.1921
+  Paired t(22) = 2.1342, p = 0.044220 *
+  Cohen's d = 0.4450
+  Wilcoxon W = 63.0, p = 0.021372
+
+FBTS+EOG vs DE+EOG (6ch temporal):
+  Riem+EOG_5band_tempor: 0.6068 +/- 0.1946
+  DE+EOG_tempor: 0.5830 +/- 0.1893
+  Paired t(22) = 1.5860, p = 0.127008 n.s.
+  Cohen's d = 0.3307
+  Wilcoxon W = 79.0, p = 0.074869
+
+FBTS vs DE (17ch single):
+  Riem_5band_all: 0.5202 +/- 0.1670
+  DE_all: 0.5205 +/- 0.1798
+  Paired t(22) = -0.0207, p = 0.983695 n.s.
+  Cohen's d = -0.0043
+  Wilcoxon W = 136.0, p = 0.964313
+
+FBTS+EOG vs DE+FBTS+EOG (17ch):
+  Riem+EOG_5band_all: 0.6182 +/- 0.1908
+  DE+Riem+EOG_5band_all: 0.6111 +/- 0.1862
+  Paired t(22) = 0.7755, p = 0.446313 n.s.
+  Cohen's d = 0.1617
+  Wilcoxon W = 97.0, p = 0.222615
