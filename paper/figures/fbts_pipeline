@@ -1,0 +1,32 @@
+digraph FBTS_Pipeline {
+	graph [dpi=300 rankdir=TB size="10,8"]
+	node [fillcolor="#f0f8ff" fontname=Arial fontsize=11 shape=rectangle style=filled]
+	edge [fontname=Arial fontsize=10]
+	EEG [label="EEG Input
+(17 channels × 1600 samples)" fillcolor="#e6f3ff"]
+	EOG [label="EOG Features
+(36-dimensional)" fillcolor="#ffe6e6"]
+	FB [label="Filter Bank
+5 bands: δ(1-4), θ(4-8), α(8-14), β(14-31), γ(31-50)" fillcolor="#fff2e6"]
+	COV [label="SPD Covariance
+Matrices (OAS)" fillcolor="#fff2e6"]
+	TS [label="Tangent Space
+Projection" fillcolor="#fff2e6"]
+	FS [label="Feature Selection
+(SelectKBest, K=100)" fillcolor="#e6ffe6"]
+	FUSION [label="Feature Fusion
+(FBTS + EOG)" fillcolor="#f0e6ff"]
+	SVR [label="SVR Regression
+(RBF kernel)" fillcolor="#e6ffe6"]
+	OUTPUT [label="PERCLOS Prediction
+(COR = 0.618)" fillcolor="#e6f3ff"]
+	EEG -> FB [label="4th-order Butterworth"]
+	FB -> COV [label="OAS shrinkage"]
+	COV -> TS [label="Logarithmic map
+(affine-invariant metric)"]
+	TS -> FS [label="F-test"]
+	FS -> FUSION [label="FBTS features"]
+	EOG -> FUSION [label="EOG features"]
+	FUSION -> SVR [label=Concatenated]
+	SVR -> OUTPUT
+}
