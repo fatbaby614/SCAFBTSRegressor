@@ -29,6 +29,10 @@
   run_efficiency_benchmark.py 计算效率基准
   run_experiment.py           黎曼度量消融 (基础版回归器)
   run_parallel.py             Torch + Joblib 并行
+
+后处理 (始终执行):
+  precompute_figures.py    预计算论文图表缓存 (FBTS 连接矩阵等)
+  generate_figures.py    从缓存生成 PNG 图片 + 统计检验
 """
 
 import sys
@@ -186,6 +190,8 @@ def evaluate_drozy_loto(clf, X, y_kss, y_bin, t_ids, cfg_type):
 
     kss_preds = []
     kss_trues = []
+    kss_pooled_preds = []
+    kss_pooled_trues = []
     bin_preds = []
     bin_trues = []
 
@@ -237,6 +243,7 @@ def evaluate_drozy_loto(clf, X, y_kss, y_bin, t_ids, cfg_type):
 
     return {
         'cor_mean': reg_cor,
+        'pooled_cor': float(cor(np.array(kss_pooled_trues), np.array(kss_pooled_preds))) if len(kss_pooled_trues) > 2 else None,
         'rmse_mean': reg_rmse,
         'acc_mean': cls_acc,
         'f1_mean': cls_f1,
@@ -253,6 +260,7 @@ def evaluate_drozy_loto_de(X_de, y_kss, y_bin, t_ids):
         return None
 
     kss_preds, kss_trues = [], []
+    kss_pooled_preds, kss_pooled_trues = [], []
     bin_preds, bin_trues = [], []
 
     for held_out in unique_tests:
@@ -299,7 +307,8 @@ def evaluate_drozy_loto_de(X_de, y_kss, y_bin, t_ids):
         cls_f1 = 0.0
 
     return {
-        'cor_mean': reg_cor, 'rmse_mean': reg_rmse,
+        'cor_mean': reg_cor, 'pooled_cor': float(cor(np.array(kss_pooled_trues), np.array(kss_pooled_preds))) if len(kss_pooled_trues) > 2 else None,
+        'rmse_mean': reg_rmse,
         'acc_mean': cls_acc, 'f1_mean': cls_f1,
     }
 
@@ -330,7 +339,8 @@ def process_drozy_subject(args):
                 results.append({
                     'dataset': 'DROZY', 'subject': f'subj{subject_id:02d}',
                     'exp_name': cfg['name'],
-                    'cor_mean': r.get('cor_mean'), 'rmse_mean': r.get('rmse_mean'),
+                    'cor_mean': r.get('cor_mean'), 'pooled_cor': r.get('pooled_cor'),
+                    'rmse_mean': r.get('rmse_mean'),
                     'acc_mean': r.get('acc_mean'), 'f1_mean': r.get('f1_mean'),
                     'time_sec': time.time() - t0,
                 })
@@ -478,24 +488,27 @@ def main():
         ds_results = [r for r in all_results if r.get('dataset') == ds]
         if not ds_results:
             continue
-        agg = defaultdict(lambda: {'cor': [], 'rmse': [], 'acc': [], 'f1': [], 'time': []})
+        agg = defaultdict(lambda: {'cor': [], 'pooled': [], 'rmse': [], 'acc': [], 'f1': [], 'time': []})
         for r in ds_results:
             if r.get('cor_mean') is not None:
                 agg[r['exp_name']]['cor'].append(r['cor_mean'])
                 agg[r['exp_name']]['rmse'].append(r.get('rmse_mean', 0))
                 agg[r['exp_name']]['time'].append(r.get('time_sec', 0))
+                if r.get('pooled_cor') is not None:
+                    agg[r['exp_name']]['pooled'].append(r['pooled_cor'])
             if r.get('acc_mean') is not None:
                 agg[r['exp_name']]['acc'].append(r['acc_mean'])
                 agg[r['exp_name']]['f1'].append(r.get('f1_mean', 0))
 
         print(f"\n[{ds}]")
         if ds == 'DROZY':
-            print(f"{'Experiment':<30s} {'N':>4s} {'COR':>8s} {'RMSE':>8s} {'ACC':>8s} {'F1':>8s} {'Time':>8s}")
-            print("-" * 80)
+            print(f"{'Experiment':<30s} {'N':>4s} {'COR':>8s} {'Pooled':>8s} {'RMSE':>8s} {'ACC':>8s} {'F1':>8s} {'Time':>8s}")
+            print("-" * 90)
             for name in sorted(agg.keys()):
                 s = agg[name]
                 n = len(s['cor'])
-                print(f"{name:<30s} {n:>4d} {np.mean(s['cor']):>8.4f} "
+                pooled = np.mean(s['pooled']) if s['pooled'] else 0
+                print(f"{name:<30s} {n:>4d} {np.mean(s['cor']):>8.4f} {pooled:>8.4f} "
                       f"{np.mean(s['rmse']):>8.3f} {np.mean(s['acc']):>8.4f} "
                       f"{np.mean(s['f1']):>8.4f} {np.mean(s['time']):>7.1f}s")
         else:
@@ -546,13 +559,18 @@ def main():
         _scripts.append(f'{_py} run_efficiency_benchmark.py')
         _scripts.append(f'{_py} run_ablation_smoothing.py --n-subjects {_nsubj}')
         _scripts.append(f'{_py} run_data_efficiency.py --n-subjects {_nsubj}')
-        # 度量消融 + Torch 并行
+        # 黎曼度量消融 + Torch 并行
         _scripts.append(f'{_py} run_experiment.py' + (' --quick' if args.quick else ''))
         _scripts.append(f'{_py} run_parallel.py --n-jobs {_nj}')
 
     for _cmd in _scripts:
         print(f"\n  Running: {_cmd}")
         _sp.run(_cmd.split(), cwd=_proj)
+
+    # ── 图表生成（论文级后处理）──
+    print(f"\n  Generating cache and figures...")
+    _sp.run([_py, os.path.join(_proj, 'precompute_figures.py')], cwd=_proj)
+    _sp.run([_py, os.path.join(_proj, 'generate_figures.py')], cwd=_proj)
 
 
 if __name__ == '__main__':

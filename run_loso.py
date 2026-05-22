@@ -221,6 +221,83 @@ def run_loso_riemann(subjects, bands='5band', channels='all', verbose=True):
     }
 
 
+def run_loso_de_eog(subjects, channels='all', regressor='svr', verbose=True):
+    """DE + EOG LOSO 评测: 将 DE 特征与 EOG 拼接后做 LOSO。"""
+    print(f"  Precomputing {len(subjects)} subjects (DE+EOG)...")
+
+    # 通道选择
+    if channels == 'temporal':
+        ch_key = 'temporal'
+    else:
+        ch_key = 'all'
+
+    # 预计算所有被试的 DE + EOG
+    all_de = {}   # {subject: X_de}
+    all_eog = {}
+    all_y = {}
+
+    for subj in subjects:
+        X_de, y, _ = build_de_features_for_baseline(
+            SEED_VIG_ROOT, subj, channels=ch_key, feature_type='de_LDS'
+        )
+        eog = load_eog_features(SEED_VIG_ROOT, subj)
+        all_de[subj] = X_de
+        all_eog[subj] = eog
+        all_y[subj] = y
+
+    cor_list, rmse_list = [], []
+
+    for i, test_subj in enumerate(subjects):
+        # 拼接训练数据
+        X_tr_list, y_tr_list = [], []
+        for train_subj in subjects:
+            if train_subj == test_subj:
+                continue
+            X_de_tr = all_de[train_subj]
+            eog_tr = all_eog[train_subj]
+            # 确保 EOG 与 DE 的 epoch 数一致
+            n_min = min(X_de_tr.shape[0], eog_tr.shape[0])
+            X_full = np.hstack([X_de_tr[:n_min], eog_tr[:n_min]])
+            X_tr_list.append(X_full)
+            y_tr_list.append(all_y[train_subj][:n_min])
+
+        X_train = np.concatenate(X_tr_list, axis=0)
+        y_train = np.concatenate(y_tr_list)
+
+        # 测试
+        n_min = min(all_de[test_subj].shape[0], all_eog[test_subj].shape[0])
+        X_test = np.hstack([all_de[test_subj][:n_min], all_eog[test_subj][:n_min]])
+        y_test = all_y[test_subj][:n_min]
+
+        # 标准化
+        scaler = StandardScaler()
+        X_train_s = scaler.fit_transform(X_train)
+        X_test_s = scaler.transform(X_test)
+
+        if regressor == 'svr':
+            clf = SVR(kernel='rbf', C=1.0, gamma='scale')
+        else:
+            clf = Ridge(alpha=1.0)
+        clf.fit(X_train_s, y_train)
+        y_pred = clf.predict(X_test_s)
+        from scipy.ndimage import uniform_filter1d
+        y_pred = uniform_filter1d(y_pred, size=3)
+        c = cor(y_test, y_pred)
+        r = rmse(y_test, y_pred)
+        cor_list.append(c)
+        rmse_list.append(r)
+        if verbose:
+            print(f"  [{i+1}/{len(subjects)}] {test_subj}: COR={c:.4f}")
+
+    return {
+        'cor_mean': float(np.mean(cor_list)),
+        'cor_std': float(np.std(cor_list)),
+        'cor_all': [float(x) for x in cor_list],
+        'rmse_mean': float(np.mean(rmse_list)),
+        'rmse_std': float(np.std(rmse_list)),
+    }
+
+
 def run_loso_riemann_eog(subjects, bands='5band', channels='all', verbose=True):
     """Riemannian FBTS + EOG LOSO 评测。"""
     print(f"  Precomputing {len(subjects)} subjects (FBTS + EOG)...")
@@ -394,6 +471,23 @@ def main():
             print(f"\n{name}")
             t0 = time.time()
             r = run_loso_riemann_eog(subjects, bands=bands, channels=ch_key)
+            elapsed = time.time() - t0
+            print(f"  -> COR={r['cor_mean']:.4f}+/-{r['cor_std']:.4f}, "
+                  f"RMSE={r['rmse_mean']:.4f}, {elapsed:.0f}s")
+            all_results.append({
+                'exp_name': name,
+                'cor_mean': r['cor_mean'], 'cor_std': r['cor_std'],
+                'rmse_mean': r['rmse_mean'], 'rmse_std': r['rmse_std'],
+                'cor_all': r['cor_all'], 'time_sec': elapsed,
+            })
+
+    # ── DE + EOG LOSO（新增！）─────────────────────────
+    for ch_name, ch_key in [('17ch', 'all'), ('6ch_temporal', 'temporal')]:
+        for reg in ['svr', 'ridge']:
+            name = f'LOSO_DE+EOG_{reg}_{ch_name}'
+            print(f"\n{name}")
+            t0 = time.time()
+            r = run_loso_de_eog(subjects, channels=ch_key, regressor=reg)
             elapsed = time.time() - t0
             print(f"  -> COR={r['cor_mean']:.4f}+/-{r['cor_std']:.4f}, "
                   f"RMSE={r['rmse_mean']:.4f}, {elapsed:.0f}s")

@@ -1,6 +1,14 @@
 # Fdb version 4
-["pdflatex"] 1778653577.34789 "d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex" "paper_jne.pdf" "paper_jne" 1778653578.83847 2
-  "d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex" 1778653574 56704 addf2aae5f581240e63d5be8bd97c3bd ""
+["bibtex paper_jne"] 0 "paper_jne.aux" "paper_jne.bbl" "paper_jne" 0 -1
+  "./references.bib" 1778657456 9766 139ee0d1e19b146c4952354a6c5a8ddf ""
+  "d:/texlive/2025/texmf-dist/bibtex/bst/iopart-num/iopart-num.bst" 1765159745 35976 1167f55bc68a6c96da4cb0ff6b4b050b ""
+  "paper_jne.aux" 1779342325 13594 96d4d0ffddee2740f79c000b7da7e308 "pdflatex"
+  (generated)
+  "paper_jne.bbl"
+  "paper_jne.blg"
+  (rewritten before read)
+["pdflatex"] 1779342321.90807 "d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex" "paper_jne.pdf" "paper_jne" 1779342326.7897 2
+  "d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex" 1779342315 53434 b79bd521219b4b2283a972a9d40bbf93 ""
   "d:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1765159165 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "d:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1765159523 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "d:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1765159367 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -122,16 +130,18 @@
   "d:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1765161224 5512713 e2e6a6c037ab0e435732e63fdc2d5cc7 ""
   "d:/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1765161479 3346019 f91428573942d31c2ef60d88206efb1d ""
   "d:/texlive/2025/texmf.cnf" 1765161191 713 e69b156964470283e0530f5060668171 ""
-  "fig_ablation_nfeatures" 0 -1 0 ""
-  "fig_cor_distribution" 0 -1 0 ""
-  "fig_heatmap" 0 -1 0 ""
-  "fig_prediction_curves" 0 -1 0 ""
-  "fig_scatter" 0 -1 0 ""
+  "fig_fbts_connectivity" 0 -1 0 ""
+  "figures/fig_ablation_nfeatures.png" 1779335205 95605 cddd91d9c77c9a921850dce7e3375a3b ""
+  "figures/fig_cor_distribution.png" 1779335202 195345 e9a5bb3504c7056818de3cac342c74d8 ""
+  "figures/fig_heatmap.png" 1779335204 180933 6616acbe6fb57f8bd94a7705f8c1f006 ""
+  "figures/fig_prediction_curves.png" 1779335203 716059 5278a66c754ca3d701e7cd1b4ae96bd6 ""
+  "figures/fig_scatter.png" 1779335203 928900 a33ee6768e19e07c2ba12bf2fe938875 ""
   "iopjournal.cls" 1750987332 5945 cac90802d0944ef390bc438cd9086a17 ""
   "orcid.pdf" 1750990320 6631 2c2df978b7b7f6dfbec0fb35cb310650 ""
-  "paper_jne.aux" 1778653578 13108 6e6e1c06f51d632d48feff1ffb230f74 "pdflatex"
-  "paper_jne.out" 1778653578 5333 ec754c2309603d637f4cc7a85ae44758 "pdflatex"
-  "paper_jne.tex" 1778653574 56704 addf2aae5f581240e63d5be8bd97c3bd ""
+  "paper_jne.aux" 1779342325 13594 96d4d0ffddee2740f79c000b7da7e308 "pdflatex"
+  "paper_jne.bbl" 1779342310 0 d41d8cd98f00b204e9800998ecf8427e "bibtex paper_jne"
+  "paper_jne.out" 1779342325 5333 ec754c2309603d637f4cc7a85ae44758 "pdflatex"
+  "paper_jne.tex" 1779342315 53434 b79bd521219b4b2283a972a9d40bbf93 ""
   (generated)
   "paper_jne.aux"
   "paper_jne.log"

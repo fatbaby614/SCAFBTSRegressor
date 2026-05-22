@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config import (
     SEED_VIG_ROOT, CACHE_DIR, BANDS_5, BAND_NAMES_5,
 )
-from data_loader import list_subjects, load_raw_eeg, load_perclos, load_eog_features
+from data_loader import list_subjects, load_raw_eeg, load_perclos, load_eog_features, load_eeg_features
 from utils import cor, get_5fold_splits
 from sca_fbts_fast import SCAFBTSRegressorFast
 from pyriemann.tangentspace import TangentSpace
@@ -67,10 +67,11 @@ def compute_heatmap_cache():
     al, dr = [], []
     for subj in subjects:
         y = load_perclos(SEED_VIG_ROOT, subj)
-        de_path = os.path.join(SEED_VIG_ROOT, 'EEG_Feature_2Hz', f'{subj}.mat')
-        de = np.load(de_path, allow_pickle=True)['DE'][:885, :, :].real
-        al.append(de[y < 0.4].mean(axis=0))
-        dr.append(de[y > 0.6].mean(axis=0))
+        feats = load_eeg_features(SEED_VIG_ROOT, subj,
+                                  feature_dir='EEG_Feature_5Bands',
+                                  feature_type='de_movingAve')  # (17, 885, 5)
+        al.append(feats[:, y < 0.4, :].mean(axis=1))
+        dr.append(feats[:, y > 0.6, :].mean(axis=1))
     np.savez(os.path.join(CACHE_DIR, 'heatmap_data.npz'),
              de_alert=np.mean(al, axis=0), de_drowsy=np.mean(dr, axis=0))
     print(f"  Saved heatmap_data.npz")

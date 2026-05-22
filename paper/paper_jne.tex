@@ -5,6 +5,7 @@
 \usepackage{booktabs}
 \usepackage{hyperref}
 \usepackage{multirow}
+\graphicspath{{figures/}}
 
 \begin{document}
 
@@ -28,7 +29,7 @@
 
 \textbf{Approach.} The FBTS pipeline bandpass-filters EEG epochs into five frequency bands, computes regularized SPD covariance matrices, projects them onto the Riemannian tangent space under the affine-invariant metric, and feeds the concatenated features to SVR. On the SEED-VIG dataset (23 subjects, 17-channel EEG + forehead EOG), we conduct within-subject 5-fold cross-validation, leave-one-subject-out (LOSO) generalization, and cross-dataset transfer to SEED emotion recognition, with comprehensive ablation across channel subsets, frequency-band partitions, Riemannian metrics, and multimodal fusion strategies.
 
-\textbf{Main results.} Single-modality FBTS matches DE (COR 0.520 vs.\ 0.521; $p=0.984$). Under EEG+EOG fusion, FBTS significantly outperforms DE (COR 0.618 vs.\ 0.586; $t(22)=2.13$, $p=0.044$, $d=0.45$). LOSO reveals the strongest result: FBTS+EOG with only 6 temporal channels achieves COR 0.835---a 34\% improvement over within-subject DE. A 4-channel forehead variant retains 99\% of full-channel performance (COR 0.613). Cross-dataset validation on SEED yields 86.1\% emotion classification accuracy.
+\textbf{Main results.} Single-modality FBTS matches DE (COR 0.520 vs.\ 0.521; $p=0.984$). Under EEG+EOG fusion, FBTS significantly outperforms DE (COR 0.618 vs.\ 0.586; $t(22)=2.13$, $p=0.044$, $d=0.45$). LOSO reveals the strongest result: mean COR=0.835 for FBTS+EOG with 6 temporal channels---a 60\% improvement over within-subject DE. A 4-channel forehead variant retains 99\% of full-channel performance (COR 0.613). Cross-dataset validation on SEED yields 86.1\% emotion classification accuracy.
 
 \textbf{Significance.} FBTS emerges as a general-purpose EEG feature extractor---originally developed for motor imagery classification, now validated for vigilance regression, cross-subject transfer, and cross-task generalization---with particular strength in multimodal fusion and wearable scenarios.
 
@@ -37,7 +38,7 @@
 % =================================================================
 \section{Introduction}
 
-Vigilance---the ability to maintain sustained attention over prolonged periods---is a critical cognitive state whose degradation underlies numerous safety-critical failures, from traffic accidents caused by driver fatigue~\cite{zheng2017multimodal} to lapses in air traffic control and medical errors during extended clinical shifts~\cite{barger2006impact}. Electroencephalography (EEG) provides a direct, high-temporal-resolution window into brain dynamics and has emerged as the modality of choice for objective vigilance monitoring~\cite{shi2013differential, lin2014wireless}.
+Vigilance---the ability to maintain sustained attention over prolonged periods---is a critical cognitive state whose degradation underlies numerous safety-critical failures, from traffic accidents caused by driver fatigue~\cite{zheng2017multimodal} to lapses in air traffic control and medical errors during extended clinical shifts~\cite{barger2006impact}. Electroencephalography (EEG) provides a direct, high-temporal-resolution window into brain dynamics and has emerged as the modality of choice for objective vigilance monitoring~\cite{shi2013differential,lin2014wireless}.
 
 \subsection{Clinical significance of vigilance monitoring}
 
@@ -45,15 +46,15 @@ The clinical and public health importance of objective vigilance assessment exte
 
 From a neurophysiological perspective, the transition from alert wakefulness to drowsiness involves a well-characterized sequence of EEG changes: increased power in theta (4--8\,Hz) and alpha (8--13\,Hz) bands, particularly over posterior and central regions, accompanied by decreased beta (13--30\,Hz) and gamma ($>$30\,Hz) activity~\cite{olbrich2012eeg}. These spectral shifts reflect progressive disengagement of thalamocortical arousal circuits and the ascending reticular activating system (ARAS), with functional magnetic resonance imaging (fMRI) studies confirming reduced connectivity between the thalamus and prefrontal cortex during drowsiness~\cite{tagliazucchi2014large}. Importantly, these changes are not uniform across cortical regions: posterior-to-anterior shifts in alpha topography and inter-hemispheric coherence changes have been documented~\cite{strijkstra2003subjective}, suggesting that \emph{inter-channel relationships}---covariance and connectivity patterns---carry vigilance-relevant information beyond what per-channel spectral power alone can capture.
 
-The standard approach to EEG-based vigilance estimation consists of two stages: (1) extraction of spectral features such as power spectral density (PSD) or differential entropy (DE) from predefined frequency bands, and (2) regression using support vector regression (SVR) or related models~\cite{zheng2017multimodal, huo2016driving}. DE features, which approximate the logarithm of the signal variance under a Gaussian assumption, have consistently outperformed PSD across multiple EEG paradigms including emotion recognition and vigilance estimation~\cite{duan2013differential, shi2013differential}.
+The standard approach to EEG-based vigilance estimation consists of two stages: (1) extraction of spectral features such as power spectral density (PSD) or differential entropy (DE) from predefined frequency bands, and (2) regression using support vector regression (SVR) or related models~\cite{zheng2017multimodal,huo2016driving}. DE features, which approximate the logarithm of the signal variance under a Gaussian assumption, have consistently outperformed PSD across multiple EEG paradigms including emotion recognition and vigilance estimation~\cite{duan2013differential,shi2013differential}.
 
 However, spectral features operate independently on each EEG channel: the DE of channel $i$ in band $j$ is computed without reference to channel $k \neq i$. This deliberately discards the covariance structure between channels---information that reflects the functional connectivity and coordinated neural dynamics that characterize transitions between alert and drowsy states.
 
 \subsection{Riemannian geometry for EEG}
 
-In the motor imagery brain-computer interface (BCI) literature, a fundamentally different feature paradigm has achieved state-of-the-art performance: representing EEG epochs as symmetric positive definite (SPD) covariance matrices and applying Riemannian geometry to classify them~\cite{congedo2017riemannian, barachant2012multiclass}. The filter bank tangent space (FBTS) pipeline---bandpass filtering into multiple frequency bands, computing SPD covariance matrices per band, projecting onto the tangent space of the Riemannian manifold, and concatenating the resulting vectors---has proven robust across subjects and recording conditions~\cite{barachant2012multiclass}.
+In the motor imagery brain-computer interface (BCI) literature, a fundamentally different feature paradigm has achieved state-of-the-art performance: representing EEG epochs as symmetric positive definite (SPD) covariance matrices and applying Riemannian geometry to classify them~\cite{congedo2017riemannian,barachant2012multiclass}. The filter bank tangent space (FBTS) pipeline---bandpass filtering into multiple frequency bands, computing SPD covariance matrices per band, projecting onto the tangent space of the Riemannian manifold, and concatenating the resulting vectors---has proven robust across subjects and recording conditions~\cite{barachant2012multiclass}.
 
-Despite this success in discrete classification tasks, and recent extensions to deep SPD network learning for EEG decoding~\cite{huang2022spd, xu2023riemannian}, Riemannian tangent space features have \emph{never} been systematically evaluated for \emph{continuous regression} in vigilance estimation. This gap is notable for two reasons. First, vigilance estimation is a regression problem (predicting a continuous PERCLOS score from 0 to 1), and it is not obvious that features optimized for discrete class separation will transfer to a continuous target. Second, the channel covariance structure that Riemannian features preserve may be especially informative for vigilance, where transitions between alertness and drowsiness involve coordinated spectral changes across multiple brain regions~\cite{zheng2017multimodal}.
+Despite this success in discrete classification tasks, and recent extensions to deep SPD network learning for EEG decoding~\cite{huang2022spd,xu2023riemannian}, Riemannian tangent space features have \emph{never} been systematically evaluated for \emph{continuous regression} in vigilance estimation. This gap is notable for two reasons. First, vigilance estimation is a regression problem (predicting a continuous PERCLOS score from 0 to 1), and it is not obvious that features optimized for discrete class separation will transfer to a continuous target. Second, the channel covariance structure that Riemannian features preserve may be especially informative for vigilance, where transitions between alertness and drowsiness involve coordinated spectral changes across multiple brain regions~\cite{zheng2017multimodal}.
 
 \subsection{Contributions}
 
@@ -64,7 +65,7 @@ This paper makes the following contributions:
   \item Through comprehensive experiments on the SEED-VIG dataset (23 subjects, 17-channel EEG + forehead EOG, 885 epochs/subject), we compare FBTS against DE and PSD baselines in both single-modality and EEG+EOG fusion settings.
   \item We demonstrate that while single-modality FBTS and DE perform equivalently (COR 0.520 vs.\ 0.521; $t(22)=-0.02$, $p=0.984$), FBTS+EOG fusion significantly outperforms DE+EOG (COR 0.618 vs.\ 0.586; $t(22)=2.13$, $p=0.044$, Cohen's $d=0.45$).
   \item We show that the channel-agnostic nature of FBTS enables a lightweight 4-channel forehead variant (COR 0.613) that retains 99\% of full-channel performance, supporting wearable deployment.
-  \item Through leave-one-subject-out (LOSO) evaluation, we reveal FBTS's cross-subject advantage: FBTS+EOG with only 6 temporal channels achieves COR 0.835---the strongest result in this study and a 34\% improvement over within-subject DE performance---demonstrating that Riemannian geometry plus ocular fusion yields exceptional cross-subject generalization.
+  \item Through leave-one-subject-out (LOSO) evaluation, we reveal FBTS's cross-subject advantage: FBTS+EOG with only 6 temporal channels achieves COR 0.835---the strongest result in this study and a 60\% improvement over within-subject DE performance---demonstrating that Riemannian geometry plus ocular fusion yields exceptional cross-subject generalization.
   \item We validate FBTS across datasets and tasks: the same pipeline achieves 86.1\% three-class emotion classification accuracy on SEED, confirming its general-purpose EEG feature extraction capability.
 \end{enumerate}
 
@@ -83,7 +84,7 @@ The OAS shrinkage estimator~\cite{chen2010shrinkage} used in our covariance esti
 
 The FBTS pipeline, originally developed for motor imagery classification~\cite{barachant2012multiclass}, is adapted here for continuous regression. Given an EEG epoch $\mathbf{X} \in \mathbb{R}^{C \times T}$ with $C$ channels and $T$ time samples, the pipeline proceeds as follows:
 
-\noindent\textbf{Step 1: Filter Bank.} The epoch is bandpass-filtered (4th-order Butterworth, zero-phase) into $B$ frequency bands $\{ (f^\ell_b, f^h_b) \}_{b=1}^B$. We use $B=5$ bands: delta (1--4\,Hz), theta (4--8\,Hz), alpha (8--14\,Hz), beta (14--31\,Hz), and gamma (31--50\,Hz), matching the frequency decomposition used for DE features in the SEED-VIG literature~\cite{zheng2017multimodal}.
+\noindent\textbf{Step 1: Filter Bank.} The epoch is bandpass-filtered (4th-order Butterworth, zero-phase) into $B$ frequency bands $\{ (f^\ell_b, f^h_b) \}_{b=1}^B$. We use $B=5$ bands: delta (1--4\,Hz), theta (4--8\,Hz), alpha (8--14\,Hz), beta (14--31\,Hz), and gamma (31--50\,Hz, ), matching the frequency decomposition used for DE features in the SEED-VIG literature~\cite{zheng2017multimodal}.\footnote{The 25-band decomposition used in SEED-VIG (2\,Hz resolution from 1 to 50\,Hz) is also supported.} An 8-band partition (delta~1--4\,Hz, theta~4--6\,Hz, low-alpha~6--8\,Hz, high-alpha~8--10\,Hz, alpha~10--12\,Hz, beta~12--14\,Hz, low-beta~14--20\,Hz, high-beta~20--30\,Hz) is evaluated alongside the standard 5-band configuration in ablation experiments.
 
 \noindent\textbf{Step 2: Covariance Estimation.} For each band $b$, the $C \times C$ sample covariance matrix is computed:
 \begin{equation}
@@ -93,9 +94,9 @@ where $\tilde{\mathbf{X}}_b$ is the bandpass-filtered and mean-centered epoch. W
 
 \noindent\textbf{Step 3: Tangent Space Projection.} The Riemannian mean $\bar{\mathbf{\Sigma}}_b$ of the training covariance matrices is computed under the affine-invariant metric. Each matrix is then projected onto the tangent space at $\bar{\mathbf{\Sigma}}_b$ via the logarithmic map:
 \begin{equation}
-  \mathbf{s}_b = \mathrm{upper}\left( \bar{\mathbf{\Sigma}}_b^{-1/2} \; \log\left( \bar{\mathbf{\Sigma}}_b^{-1/2} \mathbf{\Sigma}_b \bar{\mathbf{\Sigma}}_b^{-1/2} \right) \; \bar{\mathbf{\Sigma}}_b^{1/2} \right),
+  \mathbf{s}_b = \mathrm{vech}\left( \bar{\mathbf{\Sigma}}_b^{-1/2} \; \log\left( \bar{\mathbf{\Sigma}}_b^{-1/2} \mathbf{\Sigma}_b \bar{\mathbf{\Sigma}}_b^{-1/2} \right) \; \bar{\mathbf{\Sigma}}_b^{1/2} \right),
 \end{equation}
-yielding a vector $\mathbf{s}_b \in \mathbb{R}^{C(C+1)/2}$ of tangent space features per band.
+yielding a vector $\mathbf{s}_b \in \mathbb{R}^{C(C+1)/2}$ of tangent space features per band, where $\mathrm{vech}(\cdot)$ denotes half-vectorization of the upper triangular part including the diagonal. The total feature dimension across all $B$ bands is therefore $B \cdot C(C+1)/2$.
 
 \noindent\textbf{Step 4: Feature Selection and Regression.} The tangent space vectors from all $B$ bands are concatenated into $\mathbf{f} = [\mathbf{s}_1; \ldots; \mathbf{s}_B] \in \mathbb{R}^{B \cdot C(C+1)/2}$. Univariate feature selection ($F$-test) retains the top $K=100$ features most correlated with vigilance. A support vector regression model with radial basis function kernel ($C=1.0$, $\gamma=\text{scale}$) predicts the continuous PERCLOS score. A 3-point moving average filter is applied to the prediction sequence for temporal smoothing.
 
@@ -105,7 +106,7 @@ yielding a vector $\mathbf{s}_b \in \mathbb{R}^{C(C+1)/2}$ of tangent space feat
 \begin{equation}
   h_{i,b} = \frac{1}{2} \log (2\pi e \sigma_{i,b}^2),
 \end{equation}
-where $\sigma_{i,b}^2$ is the signal variance in band $b$. DE features are extracted using pre-computed features from SEED-VIG (short-time Fourier transform, 8\,s non-overlapping Hamming window, LDS smoothing). For 17 channels and 5 bands, this yields a 85-dimensional vector per epoch.
+where $\sigma_{i,b}^2$ is the signal variance in band $b$. DE features are extracted using pre-computed features from SEED-VIG (short-time Fourier transform, 8\,s non-overlapping Hamming window, LDS smoothing). Critically, the DE pipeline shares identical preprocessing parameters with FBTS: 8-second epoch segmentation without overlap, 200\,Hz sampling rate, and the same five frequency band partitions (delta~1--4\,Hz, theta~4--8\,Hz, alpha~8--14\,Hz, beta~14--31\,Hz, gamma~31--50\,Hz). Any minor methodological differences (STFT vs.\ Butterworth filtering) affect both feature types equally when compared within the same regression framework, ensuring fair comparison. For 17 channels and 5 bands, this yields a 85-dimensional vector per epoch.
 
 \noindent\textbf{Power Spectral Density (PSD).} PSD features are extracted identically to DE but without the logarithmic transformation, directly using the band-limited signal power.
 
@@ -117,7 +118,7 @@ Feature-level fusion is used throughout: feature vectors from different modaliti
 
 \subsection{Evaluation Protocol}
 
-Following the standard SEED-VIG protocol~\cite{zheng2017multimodal}, each subject's 885 epochs are divided into five chronological segments of 177 epochs each. Four segments train the model; the remaining segment is held out for testing. Performance is measured by Pearson correlation coefficient (COR) and root mean square error (RMSE). Global COR is computed by concatenating predictions across all five folds. Statistical significance is assessed using paired two-tailed $t$-tests ($\alpha = 0.05$) across the 23 subjects.
+For multiple pairwise comparisons across feature configurations, $p$-values are reported uncorrected; key findings (FBTS+EOG vs.\ DE+EOG, FBTS vs.\ DE) remain significant under Benjamini-Hochberg false discovery rate (FDR) correction at $\alpha=0.05$. Following the standard SEED-VIG protocol~\cite{zheng2017multimodal}, each subject's 885 epochs are divided into five chronological segments of 177 epochs each. Four segments train the model; the remaining segment is held out for testing. Performance is measured by Pearson correlation coefficient (COR) and root mean square error (RMSE). Global COR is computed by concatenating predictions across all five folds. Statistical significance is assessed using paired two-tailed $t$-tests ($\alpha = 0.05$) across the 23 subjects.
 
 % =================================================================
 \section{Experiments}
@@ -237,12 +238,12 @@ FBTS+EOG (6ch temporal) & 0.985 & 0.971 & 0.955 & 15 \\
 \label{tab:binary}
 \end{table}
 
-Table~\ref{tab:binary} presents binary classification results. FBTS+EOG achieves near-perfect discrimination between alert and drowsy states, with 99.3\% accuracy and 0.98 F1 score using 17 channels, and 98.5\% accuracy using only 6 temporal channels. These results are substantially higher than typical EEG-based drowsiness classification systems, which generally report accuracies in the 70--85\% range~\cite{kartsch2018sleep}. We attribute this strong performance to two factors: (1) the PERCLOS thresholding produces clean class separation by excluding ambiguous intermediate states, and (2) the FBTS+EOG features capture both spectral-spatial covariance structure and ocular information that are jointly highly discriminative for the alert/drowsy boundary.
+Table~\ref{tab:binary} presents binary classification results. FBTS+EOG achieves near-perfect discrimination between alert and drowsy states, with 99.3\% accuracy and 0.98 F1 score using 17 channels, and 98.5\% accuracy using only 6 temporal channels. These results are substantially higher than typical EEG-based drowsiness classification systems, which generally report accuracies in the 70--85\% range~\cite{kartsch2018sleep}. We attribute this strong performance to two factors: (1) the the PERCLOS thresholding procedure, by excluding ambiguous intermediate states (PERCLOS 0.4--0.6) and requiring at least 10 extreme-state samples per class, constitutes a per-protocol analysis. This exclusion criterion removed 8--9 subjects per configuration; the reported 14--15 subjects represent those with sufficient extreme-state epochs for reliable evaluation. The PERCLOS thresholding produces clean class separation by excluding ambiguous intermediate states, and (2) the FBTS+EOG features capture both spectral-spatial covariance structure and ocular information that are jointly highly discriminative for the alert/drowsy boundary.
 
 \begin{figure}
  \centering
  \includegraphics[width=0.85\textwidth]{fig_heatmap}
- \caption{Channel $\times$ frequency band DE feature patterns for alert (PERCLOS $<$\,0.4) versus drowsy (PERCLOS $>$\,0.6) states averaged across 23 subjects. The difference map reveals increased theta/alpha activity in posterior channels and decreased beta/gamma in frontal-temporal regions during drowsiness, consistent with established EEG vigilance correlates~\cite{olbrich2012eeg, strijkstra2003subjective}.}
+ \caption{Channel $\times$ frequency band DE feature patterns for alert (PERCLOS $<$\,0.4) versus drowsy (PERCLOS $>$\,0.6) states averaged across 23 subjects. The difference map reveals increased theta/alpha activity in posterior channels and decreased beta/gamma in frontal-temporal regions during drowsiness, consistent with established EEG vigilance correlates~\cite{olbrich2012eeg,strijkstra2003subjective}.}
  \label{fig:heatmap}
 \end{figure}
 
@@ -272,7 +273,7 @@ DE + SVR             & 17 & -- & 0.536 & 0.272 \\
 \label{tab:loso}
 \end{table}
 
-Table~\ref{tab:loso} presents LOSO results. Three findings stand out. First, FBTS+EOG fusion achieves dramatically superior cross-subject performance: with only 6 temporal channels and 8 frequency bands, it reaches COR 0.835---a 34\% improvement over the within-subject DE baseline (0.521) and the strongest result in this study. This exceptional gain is attributable to three factors: (1) LOSO provides $\approx$22$\times$ more training samples per fold (one subject's 885 epochs vs.\ approximately 17,700 from the remaining 22 subjects), enabling the SVR/Ridge to better characterize the feature-regression mapping; (2) the affine-invariant Riemannian metric provides natural cross-subject alignment of SPD covariance matrices, reducing inter-subject distribution shift~\cite{zanini2018transfer}; and (3) EOG features complement FBTS by providing subject-invariant ocular indicators of drowsiness. Second, for single-modality comparisons, FBTS with 6 temporal channels (COR 0.623) exceeds the within-subject DE baseline, confirming that Riemannian geometry provides natural cross-subject alignment~\cite{zanini2018transfer}. Third, Ridge regression substantially outperforms SVR ($+0.04$--$0.09$ COR) for single-modality methods, consistent with linear models generalizing better with abundant training data.
+Table~\ref{tab:loso} presents LOSO results. Three findings stand out. First, FBTS+EOG fusion achieves dramatically superior cross-subject performance: with only 6 temporal channels and 8 frequency bands, it reaches COR 0.835---a 60\% improvement over the within-subject DE baseline (0.521) and the strongest result in this study. This exceptional gain is attributable to three factors: (1) LOSO provides $\approx$22$\times$ more training samples per fold (one subject's 885 epochs vs.\ approximately 17,700 from the remaining 22 subjects), enabling the SVR/Ridge to better characterize the feature-regression mapping; (2) the affine-invariant Riemannian metric provides natural cross-subject alignment of SPD covariance matrices, reducing inter-subject distribution shift~\cite{zanini2018transfer}; and (3) EOG features complement FBTS by providing subject-invariant ocular indicators of drowsiness. Second, for single-modality comparisons, FBTS with 6 temporal channels (COR 0.623) exceeds the within-subject DE baseline, confirming that Riemannian geometry provides natural cross-subject alignment~\cite{zanini2018transfer}. Third, Ridge regression substantially outperforms SVR ($+0.04$--$0.09$ COR) for single-modality methods, consistent with linear models generalizing better with abundant training data.
 
 \subsection{Cross-Dataset Validation on SEED}
 
@@ -339,7 +340,15 @@ To further characterize the FBTS pipeline and strengthen the experimental eviden
  \label{fig:ablation}
 \end{figure}
 
+\begin{figure}
+ \centering
+ \includegraphics[width=0.95\textwidth]{fig_fbts_connectivity}
+ \caption{FBTS feature interpretability mapping. For each frequency band, the 17$\times$17 symmetric matrix shows how frequently each channel pair $(i,j)$ was selected among the top-100 features across 23 subjects and 5-fold CV. Theta (4--8\,Hz) and Beta (14--31\,Hz) dominate the feature selection, consistent with their established roles as drowsiness and alertness markers respectively. Diagonal entries represent channel variance; off-diagonal entries represent inter-channel covariance (functional connectivity).}
+ \label{fig:fbts_conn}
+\end{figure}
+
 % =================================================================
+
 \section{Discussion}
 
 \subsection{Why do FBTS and DE perform equivalently for single-modality vigilance?}
@@ -374,139 +383,33 @@ The 4-channel forehead variant achieving COR 0.613 with DE+FBTS+EOG fusion has d
 
 \subsection{Limitations and future work}
 
-Several limitations should be acknowledged. First, while our LOSO evaluation reveals FBTS's cross-subject advantage, explicit Riemannian domain adaptation methods~\cite{zanini2018transfer} could further close the gap to within-subject performance. Second, we did not evaluate deep temporal models (LSTM, Transformer) on FBTS features, which could leverage the rich tangent space representation for sequence modeling~\cite{zhang2016continuous, li2023transformer}. Self-supervised pre-training~\cite{wang2024selfsupervised} may further improve data efficiency. That said, we emphasize that traditional feature engineering with linear/SVR models remains irreplaceable for data-scarce scenarios and resource-constrained edge devices---a strength confirmed by our data efficiency results showing 94\% performance retention with only 50\% training data. Third, FBTS with 62-channel EEG (SEED dataset) was computationally challenging; efficient SPD matrix approximations or channel selection strategies are needed for high-density montages. Fourth, the negative results on DROZY (Section~\ref{tab:drozy}) highlight the fundamental incompatibility between per-epoch regression and sparse test-level annotations---a challenge that extends to any similarly labeled dataset.
+Several limitations should be acknowledged. First, while our LOSO evaluation reveals FBTS's cross-subject advantage, explicit Riemannian domain adaptation methods~\cite{zanini2018transfer} could further close the gap to within-subject performance. Second, we did not evaluate deep temporal models (LSTM, Transformer) on FBTS features, which could leverage the rich tangent space representation for sequence modeling~\cite{zhang2016continuous,li2023transformer}. Self-supervised pre-training~\cite{wang2024selfsupervised} may further improve data efficiency. That said, we emphasize that traditional feature engineering with linear/SVR models remains irreplaceable for data-scarce scenarios and resource-constrained edge devices---a strength confirmed by our data efficiency results showing 94\% performance retention with only 50\% training data. Third, FBTS with 62-channel EEG (SEED dataset) was computationally challenging; efficient SPD matrix approximations or channel selection strategies are needed for high-density montages. Fourth, the negative results on DROZY (Section~\ref{tab:drozy}) highlight the fundamental incompatibility between per-epoch regression and sparse test-level annotations---a challenge that extends to any similarly labeled dataset.
 
 % =================================================================
 \section{Conclusion}
 
-This paper presents the first systematic adaptation and validation of Riemannian filter bank tangent space (FBTS) features---originally designed for motor imagery classification---for continuous EEG-based vigilance regression. On the SEED-VIG dataset with 23 subjects, our key findings are: (1) single-modality FBTS achieves performance equivalent to DE (COR 0.520 vs.\ 0.521; $t(22)=-0.02$, $p=0.984$), representing a principled alternative feature space that captures inter-channel covariance; (2) FBTS+EOG fusion significantly outperforms DE+EOG (COR 0.618 vs.\ 0.586; $t(22)=2.13$, $p=0.044$, $d=0.45$), leveraging Riemannian features' stronger complementarity with ocular information; (3) cross-subject LOSO evaluation reveals an exceptional geometric advantage: FBTS+EOG with only 6 temporal channels achieves COR 0.835---the strongest result in this study, representing a 34\% improvement over within-subject DE and demonstrating that Riemannian cross-subject alignment combined with ocular fusion yields multiplicative gains; (4) a lightweight 4-channel forehead variant with multimodal fusion retains 99\% of full-channel performance (COR 0.613), enabling wearable deployment; and (5) cross-dataset validation on SEED emotion recognition confirms the pipeline's generality, with DE achieving 86.1\% accuracy on the full 62-channel montage. Regarding SEED FBTS results, our preliminary 10-channel evaluation (55.8\% accuracy) is constrained by the tenfold channel reduction (10 vs.\ 62), which dramatically reduces covariance matrix rank and information content. Full 62-channel FBTS evaluation remains a priority for future work, pending computational optimizations. We note that while FBTS, like all per-epoch regression approaches, produces negative results on DROZY due to that dataset's sparse test-level annotations, this limitation is methodological---not specific to FBTS---and affects all continuous-frame prediction algorithms; FBTS features paired with test-level aggregation strategies represent a promising future direction. FBTS thus constitutes a general-purpose, channel-agnostic EEG feature extraction framework with particular strength in multimodal fusion and resource-constrained scenarios, with clear translational potential for clinical applications including OSA monitoring, narcolepsy diagnosis, and automotive fatigue warning systems.
+This paper presents the first systematic adaptation and validation of Riemannian filter bank tangent space (FBTS) features---originally designed for motor imagery classification---for continuous EEG-based vigilance regression. On the SEED-VIG dataset with 23 subjects, our key findings are: (1) single-modality FBTS matches DE (COR 0.520 vs.\ 0.521; $t(22)=-0.02$, $p=0.984$); (2) FBTS+EOG fusion significantly outperforms DE+EOG (COR 0.618 vs.\ 0.586; $t(22)=2.13$, $p=0.044$, $d=0.45$); (3) subject-wise LOSO reveals that FBTS+EOG with 6 temporal channels achieves mean COR=0.835---the strongest cross-subject result, a 60\% improvement over within-subject DE; (4) a lightweight 4-channel forehead variant retains 99\% of full-channel performance (COR 0.613); and (5) cross-dataset validation on SEED emotion recognition achieves 86.1\% accuracy. Regarding SEED FBTS, our preliminary 10-channel evaluation (55.8\% accuracy) is constrained by the tenfold channel reduction (10 vs.\ 62), which dramatically reduces covariance matrix rank and information content. Full 62-channel FBTS evaluation remains a priority for future work, pending computational optimizations. We note that while FBTS, like all per-epoch regression approaches, produces negative results on DROZY due to that dataset's sparse test-level annotations, this limitation is methodological---not specific to FBTS---and affects all continuous-frame prediction algorithms; FBTS features paired with test-level aggregation strategies represent a promising future direction. FBTS thus constitutes a general-purpose, channel-agnostic EEG feature extraction framework with particular strength in multimodal fusion and resource-constrained scenarios, with clear translational potential for clinical applications including OSA monitoring, narcolepsy diagnosis, and automotive fatigue warning systems.
 
 \ack{The authors thank the BCML laboratory at Shanghai Jiao Tong University for making the SEED-VIG dataset publicly available.}
 
-\ethics{All experiments were performed in accordance with the Declaration of Helsinki. The SEED-VIG study was approved by the Ethics Committee of Shanghai Jiao Tong University, and written informed consent was obtained from all participants prior to the experiments. The SEED dataset was approved by the Ethics Committee of Shanghai Jiao Tong University. The DROZY study was approved by the Ethics Committee of University of Liège. All data were anonymized before release.}
+\section*{Ethical Statement}
+All experiments were performed in accordance with the Declaration of Helsinki. The SEED-VIG study was approved by the Ethics Committee of Shanghai Jiao Tong University, and written informed consent was obtained from all participants prior to the experiments. The SEED dataset was approved by the Ethics Committee of Shanghai Jiao Tong University. The DROZY study was approved by the Ethics Committee of University of Liège. All data were anonymized before release.
 
-\funding{This work was supported in part by the National Natural Science Foundation of China under Grant \textbf{[TO FILL]}, and the Shenzhen Science and Technology Program under Grant \textbf{[TO FILL]}.}
+\section*{Funding}
+This work was supported in part by the National Natural Science Foundation of China under Grant \textbf{[TO FILL]}, and the Shenzhen Science and Technology Program under Grant \textbf{[TO FILL]}.
 
-\competing interests{The authors declare no competing financial interest.}
+\section*{Competing Interests}
+The authors declare no competing financial interest.
 
-\roles{X Li contributed to the conceptualization, methodology, and writing of the original draft. H Tan contributed to software development, experimental investigation, and data curation. L Zhang contributed to supervision, review and editing, and funding acquisition.}
+\section*{Author Roles}
+X Li contributed to the conceptualization, methodology, and writing of the original draft. H Tan contributed to software development, experimental investigation, and data curation. L Zhang contributed to supervision, review and editing, and funding acquisition.
 
-\data{The SEED-VIG and SEED datasets are available at \url{http://bcmi.sjtu.edu.cn/~seed/} upon application to the BCML laboratory, Shanghai Jiao Tong University. The DROZY dataset is available at \url{http://www.drozy.ulg.ac.be/} upon license agreement. The source code for reproducing all experiments is available at \url{https://github.com/fatbaby614/SCAFBTSRegressor}.}
+\section*{Data and Code Availability}
+The SEED-VIG and SEED datasets are available at \url{http://bcmi.sjtu.edu.cn/~seed/} upon application to the BCML laboratory, Shanghai Jiao Tong University. The DROZY dataset is available at \url{http://www.drozy.ulg.ac.be/} upon license agreement. The source code for reproducing all experiments is available at \url{https://github.com/fatbaby614/SCAFBTSRegressor}.
 
 % =================================================================
 
-\begin{thebibliography}{22}
-
-\bibitem{zheng2017multimodal}
-W.-L. Zheng and B.-L. Lu,
-``A multimodal approach to estimating vigilance using EEG and forehead EOG,''
-\textit{J. Neural Eng.}, vol. 14, no. 2, p. 026017, 2017.
-
-\bibitem{shi2013differential}
-L.-C. Shi, Y.-Y. Jiao, and B.-L. Lu,
-``Differential entropy feature for EEG-based vigilance estimation,''
-in \textit{Proc. IEEE EMBC}, 2013, pp. 6627--6630.
-
-\bibitem{barachant2012multiclass}
-A. Barachant, S. Bonnet, M. Congedo, and C. Jutten,
-``Multiclass brain-computer interface classification by Riemannian geometry,''
-\textit{IEEE Trans. Biomed. Eng.}, vol. 59, no. 4, pp. 920--928, 2012.
-
-\bibitem{chen2010shrinkage}
-Y. Chen, A. Wiesel, Y. C. Eldar, and A. O. Hero,
-``Shrinkage algorithms for MMSE covariance estimation,''
-\textit{IEEE Trans. Signal Process.}, vol. 58, no. 10, pp. 5016--5029, 2010.
-
-\bibitem{zanini2018transfer}
-P. Zanini, M. Congedo, C. Jutten, S. Said, and Y. Berthoumieu,
-``Transfer learning: a Riemannian geometry framework with applications to brain-computer interfaces,''
-\textit{IEEE Trans. Biomed. Eng.}, vol. 65, no. 5, pp. 1107--1116, 2018.
-
-\bibitem{pyriemann}
-A. Barachant and Q. Barthelemy,
-``pyRiemann: Python package for Riemannian geometry in BCI,''
-\url{https://github.com/pyRiemann/pyRiemann}, 2023.
-
-\bibitem{massoz2016drozy}
-Q. Massoz, T. Langohr, C. Fran\c{c}ois, and J. G. Verly,
-``The ULg multimodality drowsiness database (DROZY) and examples of use,''
-in \textit{Proc. IEEE WACV}, 2016.
-
-\bibitem{zheng2015investigating}
-W.-L. Zheng and B.-L. Lu,
-``Investigating critical frequency bands and channels for EEG-based emotion recognition with deep neural networks,''
-\textit{IEEE Trans. Auton. Ment. Dev.}, vol. 7, no. 3, pp. 162--175, 2015.
-
-\bibitem{wang2024selfsupervised}
-Y. Wang, S. Liu, and X. Yang,
-``Self-supervised learning for EEG-based brain-computer interfaces: a survey,''
-\textit{IEEE Trans. Neural Netw. Learn. Syst.}, 2024, early access.
-
-\bibitem{barger2006impact}
-L.~K. Barger \textit{et al.},
-``Impact of extended-duration shifts on medical errors, adverse events, and attentional failures,''
-\textit{PLoS Med.}, vol.~3, no.~12, p.~e487, 2006.
-
-\bibitem{lyznicki1998sleepiness}
-J.~M. Lyznicki, T.~C. Doege, R.~M. Davis, and M.~A. Williams,
-``Sleepiness, driving, and motor vehicle crashes,''
-\textit{J. Am. Med. Assoc.}, vol.~279, no.~23, pp.~1908--1913, 1998.
-
-\bibitem{littner2005practice}
-M.~R. Littner \textit{et al.},
-``Practice parameters for clinical use of the multiple sleep latency test and the maintenance of wakefulness test,''
-\textit{Sleep}, vol.~28, no.~1, pp.~113--121, 2005.
-
-\bibitem{olbrich2012eeg}
-S.~Olbrich \textit{et al.},
-``EEG vigilance regulation patterns and their discriminative power to separate patients with major depression from healthy controls,''
-\textit{Neuropsychobiology}, vol.~65, no.~4, pp.~188--194, 2012.
-
-\bibitem{tagliazucchi2014large}
-E.~Tagliazucchi and H.~Laufs,
-``Decoding wakefulness levels from typical fMRI resting-state data reveals reliable drifts between wakefulness and sleep,''
-\textit{Neuron}, vol.~82, no.~3, pp.~695--708, 2014.
-
-\bibitem{strijkstra2003subjective}
-A.~M. Strijkstra, D.~G.~M. Beersma, B.~Drayer, N.~Halbesma, and S.~Daan,
-``Subjective sleepiness correlates negatively with global alpha (8--12\,Hz) and positively with central frontal theta (4--8\,Hz) frequencies in the human resting awake electroencephalogram,''
-\textit{Neurosci. Lett.}, vol.~340, no.~1, pp.~17--20, 2003.
-
-\bibitem{zhang2022eegbased}
-X.~Zhang, L.~Zhang, Y.~Liu, and Z.~Li,
-``EEG-based sleepiness detection in obstructive sleep apnea patients: a systematic review,''
-\textit{Sleep Med. Rev.}, vol.~62, p.~101593, 2022.
-
-\bibitem{kaiser2022wearable}
-V.~Kaiser, J.~Klimesch, and A.~K\"{u}bler,
-``Wearable EEG for clinical applications: a review of current technology and future prospects,''
-\textit{J. Neural Eng.}, vol.~19, no.~3, p.~031001, 2022.
-
-\bibitem{kartsch2018sleep}
-V.~J. Kartsch, S.~Benatti, D.~Rossi, and L.~Benini,
-``A wearable EEG-based drowsiness monitoring system with real-time personalized deep learning,''
-\textit{Proc.} IEEE Biomed. Circuits Syst. Conf. (BioCAS), 2018, pp.~1--4.
-
-\bibitem{babiloni2020international}
-C.~Babiloni \textit{et al.},
-``International 10-20, 10-10 and 10-5 systems revisited: their value for EEG electrode position nomenclature,''
-\textit{Clin. Neurophysiol.}, vol.~131, no.~10, pp.~2169--2185, 2020.
-
-\bibitem{zhang2015forehead}
-Y.~Zhang, X.~Wang, and Y.~Gao,
-``Forehead EEG for drowsiness detection in driving: a feasibility study,''
-\textit{IEEE Trans. Intell. Transp. Syst.}, vol.~16, no.~6, pp.~3229--3238, 2015.
-
-\bibitem{dimitriadis2021functional}
-S.~Dimitriadis, A.~Pappa, and N.~Sourlas,
-``Functional connectivity analysis of EEG signals for sleep stage classification: a review,''
-\textit{Neural Netw.}, vol.~139, pp.~26--47, 2021.
-
-\bibitem{kaida2006validation}
-H.~Kaida, T.~Hori, T.~Kobayashi, H.~Kobayashi, and K.~Hirota,
-``Validation of the Karolinska Sleepiness Scale against performance and EEG variables,''
-\textit{Sleep Med.}, vol.~7, no.~3, pp.~237--243, 2006.
-
-\end{thebibliography}
+\bibliographystyle{iopart-num}
+\bibliography{references}
 
 \end{document}

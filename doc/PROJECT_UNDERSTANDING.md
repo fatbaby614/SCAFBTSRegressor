@@ -301,7 +301,7 @@ torch (可选)         — sca_fbts_torch.py 的 GPU 协方差加速
 ├─────────────────────────────────────────────────┤
 │                  论文输出层                        │
 │  generate_figures.py        图表 + 统计检验         │
-│  _compute_figures.py        图表数据预计算          │
+│  precompute_figures.py        图表数据预计算          │
 │  paper/paper_jne.tex        JNE 稿件               │
 │  paper/figures/cache/       预计算缓存（.npz）      │
 │  results/                   实验结果（JSON）        │
@@ -373,7 +373,7 @@ python run_seed_fbts.py                # SEED Riemannian 10ch
 ### 9.3 论文图表生成
 
 ```bash
-python _compute_figures.py             # 预计算缓存（跑一次）
+python precompute_figures.py             # 预计算缓存（跑一次）
 python generate_figures.py             # 从缓存秒出图表
 # 或一步到位：
 python generate_figures.py --recompute

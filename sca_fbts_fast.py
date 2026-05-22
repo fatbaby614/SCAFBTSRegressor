@@ -160,7 +160,7 @@ class SCAFBTSRegressorFast:
         print(f"    Precomputed {self._n_epochs} epochs × "
               f"{len(self.freq_bands)} bands ({self._n_channels}ch)")
 
-    def fit(self, indices_or_X, y=None):
+    def fit(self, indices_or_X, y=None, X_eog_extra=None):
         """训练回归器。
 
         两种调用方式:
@@ -170,6 +170,7 @@ class SCAFBTSRegressorFast:
         Args:
             indices_or_X: 整数数组(epoch索引) 或 (n, ch, time) 数组
             y: (n,) PERCLOS 标签
+            X_eog_extra: (n, d) EOG 特征 (可选，用于多模态融合)
         """
         if y is None:
             raise ValueError("需要提供标签 y")
@@ -178,12 +179,12 @@ class SCAFBTSRegressorFast:
         if isinstance(indices_or_X, np.ndarray) and indices_or_X.ndim == 1 and \
            indices_or_X.dtype in (np.int32, np.int64, int):
             # 预计算模式: indices
-            return self._fit_from_precomputed(indices_or_X, y)
+            return self._fit_from_precomputed(indices_or_X, y, X_eog_extra)
         else:
             # 传统模式: 完整 X
-            return self._fit_traditional(indices_or_X, y)
+            return self._fit_traditional(indices_or_X, y, X_eog_extra)
 
-    def _fit_from_precomputed(self, indices, y):
+    def _fit_from_precomputed(self, indices, y, X_eog_extra=None):
         """从预计算缓存训练 (核心加速路径)。"""
         if not self._precomputed:
             raise RuntimeError("请先调用 precompute()")
@@ -202,6 +203,10 @@ class SCAFBTSRegressorFast:
             features_list.append(ts_feats)
 
         X_combined = np.hstack(features_list)
+
+        # 融合 EOG 特征
+        if X_eog_extra is not None:
+            X_combined = np.hstack([X_combined, X_eog_extra])
 
         # 特征选择
         if self.n_features is not None:
@@ -224,7 +229,7 @@ class SCAFBTSRegressorFast:
         self.regressor.fit(X_selected, y)
         return self
 
-    def _fit_traditional(self, X, y):
+    def _fit_traditional(self, X, y, X_eog_extra=None):
         """传统路径 (无预计算，与旧版兼容)。"""
         features_list = []
         self.ts_transformers = []
@@ -240,6 +245,10 @@ class SCAFBTSRegressorFast:
             features_list.append(ts_feats)
 
         X_combined = np.hstack(features_list)
+
+        # 融合 EOG 特征
+        if X_eog_extra is not None:
+            X_combined = np.hstack([X_combined, X_eog_extra])
 
         if self.n_features is not None:
             n_select = min(self.n_features, X_combined.shape[1])
@@ -259,19 +268,20 @@ class SCAFBTSRegressorFast:
         self.regressor.fit(X_selected, y)
         return self
 
-    def predict(self, indices_or_X):
+    def predict(self, indices_or_X, X_eog_extra=None):
         """预测。
 
         Args:
             indices_or_X: epoch 索引数组 或 (n, ch, time) 数组
+            X_eog_extra: (n, d) EOG 特征 (可选，用于多模态融合)
         """
         if isinstance(indices_or_X, np.ndarray) and indices_or_X.ndim == 1 and \
            indices_or_X.dtype in (np.int32, np.int64, int):
-            return self._predict_from_precomputed(indices_or_X)
+            return self._predict_from_precomputed(indices_or_X, X_eog_extra)
         else:
-            return self._predict_traditional(indices_or_X)
+            return self._predict_traditional(indices_or_X, X_eog_extra)
 
-    def _predict_from_precomputed(self, indices):
+    def _predict_from_precomputed(self, indices, X_eog_extra=None):
         """从预计算缓存预测。"""
         features_list = []
 
@@ -281,6 +291,10 @@ class SCAFBTSRegressorFast:
             features_list.append(ts_feats)
 
         X_combined = np.hstack(features_list)
+
+        # 融合 EOG 特征
+        if X_eog_extra is not None:
+            X_combined = np.hstack([X_combined, X_eog_extra])
 
         if self.feature_selector is not None:
             X_selected = self.feature_selector.transform(X_combined)
@@ -298,7 +312,7 @@ class SCAFBTSRegressorFast:
 
         return y_pred
 
-    def _predict_traditional(self, X):
+    def _predict_traditional(self, X, X_eog_extra=None):
         """传统预测路径。"""
         features_list = []
 
@@ -310,6 +324,10 @@ class SCAFBTSRegressorFast:
             features_list.append(ts_feats)
 
         X_combined = np.hstack(features_list)
+
+        # 融合 EOG 特征
+        if X_eog_extra is not None:
+            X_combined = np.hstack([X_combined, X_eog_extra])
 
         if self.feature_selector is not None:
             X_selected = self.feature_selector.transform(X_combined)

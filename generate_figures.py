@@ -1,7 +1,7 @@
 """
 论文图表绘制（从缓存加载，秒级完成）
 ====================================
-依赖: _compute_figures.py 预先生成的 paper/figures/cache/*.npz
+依赖: precompute_figures.py 预先生成的 paper/figures/cache/*.npz
 运行: python generate_figures.py [--recompute]
 """
 
@@ -108,7 +108,7 @@ def draw_scatter():
     ax.plot([0, 1], [0, 1], 'k-', linewidth=0.5, alpha=0.3)
     ax.set_xlabel('Ground Truth PERCLOS')
     ax.set_ylabel('Predicted PERCLOS')
-    ax.set_title(f'All Subjects, Global COR={cor(yt_all, yp_all):.4f}')
+    ax.set_title(f'FBTS+EOG (17ch, 5-band) Within-Subject 5-Fold CV, Global COR={cor(yt_all, yp_all):.4f}')
     ax.legend()
     ax.set_xlim(-0.05, 1.05)
     ax.set_ylim(-0.05, 1.05)
@@ -251,6 +251,111 @@ def draw_ablation():
 
 
 # ═══════════════════════════════════════════════════
+# 6. COR 分布箱线图（Fig. 1）
+# ═══════════════════════════════════════════════════
+
+def draw_cor_distribution():
+    """从最新 fusion JSON 中加载逐被试 COR，画六种方法的箱线图。"""
+    print("Drawing COR distribution...")
+    files = sorted(glob.glob(os.path.join(ROOT, 'results', 'results_fusion_*.json')))
+    if not files:
+        print("  ERROR: No fusion results found")
+        return
+
+    data = json.load(open(files[-1], encoding='utf-8'))
+    exp_cors = defaultdict(list)
+    for r in data:
+        if r.get('cor_mean') is not None:
+            exp_cors[r['exp_name']].append(r['cor_mean'])
+
+    # 六种代表方法（按论文顺序）
+    methods = [
+        ('DE_all',              'DE 17ch'),
+        ('Riem_5band_all',      'FBTS 17ch'),
+        ('DE+EOG_all',          'DE+EOG 17ch'),
+        ('Riem+EOG_5band_all',  'FBTS+EOG 17ch'),
+        ('Riem+EOG_5band_tempor', 'FBTS+EOG 6ch'),
+        ('DE+Riem+EOG_5band_all', 'DE+FBTS+EOG 17ch'),
+    ]
+
+    labels = [m[1] for m in methods]
+    data_list = []
+    for key, _ in methods:
+        vals = exp_cors.get(key, [])
+        data_list.append(vals)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bp = ax.boxplot(data_list, tick_labels=labels, showmeans=True,
+                    meanprops=dict(marker='D', markerfacecolor='red', markersize=6),
+                    widths=0.5, patch_artist=True)
+    colors = ['#5DADE2', '#48C9B0', '#F5B041', '#E74C3C', '#AF7AC5', '#58D68D']
+    for patch, c in zip(bp['boxes'], colors):
+        patch.set_facecolor(c)
+        patch.set_alpha(0.6)
+
+    # 标注均值
+    for i, vals in enumerate(data_list):
+        if not vals:
+            continue
+        m = np.mean(vals)
+        ax.annotate(f'{m:.3f}', xy=(i+1, m), fontsize=9,
+                     ha='center', va='bottom', color='red', fontweight='bold')
+
+    ax.set_ylabel('COR')
+    ax.set_title('Per-Subject COR Distribution (23 subjects, 5-fold CV)')
+    ax.grid(True, axis='y', alpha=0.3)
+    plt.xticks(rotation=15)
+
+    plt.tight_layout()
+    path = os.path.join(OUTPUT, 'fig_cor_distribution.png')
+    fig.savefig(path, format='png')
+    plt.close()
+    print(f"  Saved: {path}")
+
+
+
+# =================================================
+# 7. FBTS 通道对可解释性图
+# =================================================
+
+def draw_fbts_connectivity():
+    """从 fbts_connectivity.npz 加载, 画 5x17x17 通道对重要性热图。"""
+    print("Drawing FBTS connectivity...")
+    fpath = os.path.join(CACHE, 'fbts_connectivity.npz')
+    if not os.path.exists(fpath):
+        print("  SKIP: run python precompute_figures.py --skip-prediction --skip-heatmap --skip-ablation")
+        return
+    data = np.load(fpath, allow_pickle=True)
+    imp = data['importance']
+    bp = data['band_pct']
+    band_names = data['band_names']
+    ch_names = data['ch_names']
+
+    fig, axes = plt.subplots(2, 3, figsize=(18, 11))
+    axes = axes.flatten()
+    for bi in range(5):
+        ax = axes[bi]
+        mat_sym = (imp[bi] + imp[bi].T) / 2
+        im = ax.imshow(mat_sym, aspect='equal', cmap='YlOrRd', interpolation='nearest', vmin=0)
+        ax.set_xticks(range(17)); ax.set_xticklabels(ch_names, rotation=90, fontsize=6)
+        ax.set_yticks(range(17)); ax.set_yticklabels(ch_names, fontsize=6)
+        ax.set_title(f'{band_names[bi]} ({bp[bi]:.1f}%)', fontsize=12)
+        plt.colorbar(im, ax=ax, shrink=0.8, label='Selection freq.')
+    ax = axes[5]
+    bars = ax.bar(range(5), bp, color=['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd'])
+    ax.set_xticks(range(5)); ax.set_xticklabels(band_names, rotation=30)
+    ax.set_ylabel('% of top-100 features')
+    ax.set_title('Top-100 Feature Band Distribution')
+    for bar, pct in zip(bars, bp):
+        ax.text(bar.get_x()+bar.get_width()/2, bar.get_height()+0.5, f'{pct:.1f}%', ha='center', fontsize=9)
+    fig.suptitle('FBTS Channel-Pair Importance: Top-100 Features Mapped to Bands and Electrode Pairs', fontsize=13)
+    plt.tight_layout()
+    fig.savefig(os.path.join(OUTPUT, 'fig_fbts_connectivity.png'), format='png', dpi=300, bbox_inches='tight')
+    plt.close()
+    print(f"  Saved: {OUTPUT}/fig_fbts_connectivity.png")
+
+
+# ═══════════════════════════════════════════════════
 # Main
 # ═══════════════════════════════════════════════════
 
@@ -258,23 +363,23 @@ if __name__ == '__main__':
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument('--recompute', action='store_true',
-                   help='Run _compute_figures.py first to regenerate cache')
+                   help='Run precompute_figures.py first to regenerate cache')
     args = p.parse_args()
 
     if args.recompute:
         print("Recomputing cache...")
         import subprocess
         subprocess.run([sys.executable,
-                        os.path.join(ROOT, '_compute_figures.py')],
+                        os.path.join(ROOT, 'precompute_figures.py')],
                        check=True)
 
     # 检查缓存是否存在
-    required = ['cors_data.npz', 'heatmap_data.npz', 'ablation_data.npz']
+    required = ['cors_data.npz', 'heatmap_data.npz', 'ablation_data.npz', 'fbts_connectivity.npz']
     missing = [f for f in required
                if not os.path.exists(os.path.join(CACHE, f))]
     if missing:
         print(f"ERROR: Cache files missing: {missing}")
-        print(f"Run first: python _compute_figures.py")
+        print(f"Run first: python precompute_figures.py")
         print(f"Or:       python generate_figures.py --recompute")
         sys.exit(1)
 
@@ -282,10 +387,12 @@ if __name__ == '__main__':
     print("Paper Figure Generation (from cache)")
     print("=" * 60)
 
+    draw_cor_distribution()
     draw_prediction_curves()
     draw_scatter()
     draw_heatmap()
     compute_statistical_tests()
+    draw_fbts_connectivity()
     draw_ablation()
 
     print(f"\nDone. Figures saved to: {OUTPUT}")

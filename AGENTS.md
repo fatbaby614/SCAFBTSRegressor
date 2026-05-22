@@ -22,6 +22,7 @@ sca_fbts_fast.py ★     data_loader.py      run_all.py ★
 sca_fbts_regressor.py  drozy_loader.py     run_final.py
 sca_fbts_torch.py      utils.py            run_fusion.py
                        config.py           run_loso.py ...
+                       precompute_figures.py
 ```
 
 ### Core Engine
@@ -35,8 +36,8 @@ Key API pattern (Fast version):
 ```python
 clf = SCAFBTSRegressorFast(freq_bands='5band', estimator='oas', ...)
 clf.precompute(raw_eeg, fs=200)          # One-time: filter + covariance
-clf.fit(train_indices, y[train_indices])  # Per-fold: tangent space + SVR
-y_pred = clf.predict(test_indices)
+clf.fit(train_indices, y[train_indices], X_eog_extra=...)  # Per-fold: tangent space + SVR
+y_pred = clf.predict(test_indices, X_eog_extra=...)
 ```
 
 ### Data Layer
@@ -161,12 +162,14 @@ All other files import from `config`. **Do NOT hardcode paths in scripts.**
 ## 9. Building the Paper
 
 ```bash
-python _compute_figures.py               # Generate cache (once, slow)
-python generate_figures.py               # Figures from cache (fast)
+python precompute_figures.py               # Generate cache (once, slow)
+python generate_figures.py                 # Figures from cache (fast)
 cd paper && pdflatex paper_jne.tex && pdflatex paper_jne.tex
 ```
 
-Paper structure: `paper/paper_jne.tex` — IOP template, 12pp, 5 tables, 32 refs.
+**Note:** Figures are now output as PNG (not PDF) for compatibility with submission systems.
+
+Paper structure: `paper/paper_jne.tex` — IOP template, 12pp, 5 tables, 22 refs.
 
 ---
 
@@ -204,6 +207,7 @@ SEED-VIG channel subsets: `all`=0–16, `temporal`=0–5, `forehead`=0–3.
 | `MemoryError` SEED 62ch | FBTS cov dimension = 9765d; use `run_seed_fbts.py` (10ch) instead |
 | `joblib` pickle error | Lambda in config not serializable; use `--n-jobs 1` |
 | Import errors | Run from project root; all scripts use `sys.path.insert(0, ...)` |
+| `TypeError: fit() got an unexpected keyword argument 'X_eog_extra'` | Ensure `sca_fbts_fast.py` is up-to-date (EOG fusion support added 2026-05-13) |
 
 ---
 
@@ -211,7 +215,7 @@ SEED-VIG channel subsets: `all`=0–16, `temporal`=0–5, `forehead`=0–3.
 
 ```
 config.py              ← PATH ONLY FILE (edit for new environments)
-sca_fbts_fast.py       ← MAIN ENGINE (use this)
+sca_fbts_fast.py       ← MAIN ENGINE (use this; supports X_eog_extra for fusion)
 run_all.py             ← ORCHESTRATOR (one-click everything)
 run_fusion.py          ← FUSION + METRIC ABLATION (Tables 2-3)
 run_loso.py            ← CROSS-SUBJECT (Table 4)
@@ -219,9 +223,24 @@ run_binary.py          ← ALERT vs DROWSY
 data_loader.py         ← SEED-VIG data
 drozy_loader.py        ← DROZY data
 utils.py               ← COR/RMSE/MAE + splits
-generate_figures.py    ← PAPER FIGURES
+precompute_figures.py  ← Figure data precomputation (replaces _compute_figures.py)
+generate_figures.py    ← PAPER FIGURES (from cache, PNG output)
+paper/                 ← Paper LaTeX source + figures + compiled PDF
+results/               ← Experiment result JSONs
 SKILL.md               ← PROJECT SKILL (human reference)
 README.md              ← PROJECT README (Chinese)
 doc/DATASETS.md        ← DATASET SPECS
-config.py              ← PATH CONFIG (edit once)
 ```
+
+---
+
+## 14. Recent Changes (2026-05-13)
+
+| Change | Description | Files |
+|--------|-------------|-------|
+| EOG fusion API | Added `X_eog_extra` parameter to `fit()` and `predict()` for multimodal fusion | `sca_fbts_fast.py` |
+| Script rename | `_compute_figures.py` renamed to `precompute_figures.py` | `precompute_figures.py` |
+| Cleanup | Removed 6 redundant tool scripts from repo | `_compute_figures.py`, `_explore_seed.py`, `_find_line.py`, `_show_fusion.py`, `_show_loso.py`, `_show_results.py` |
+| Figure format | Changed from PDF to PNG for journal submission compatibility | `generate_figures.py` |
+| Paper revision | Fixed all reference citations; updated Discussion for reviewer concerns | `paper/paper_jne.tex` |
+| References | Trimmed from 32 to 22; removed unused bibitems, added missing ones | `paper/paper_jne.tex` |
