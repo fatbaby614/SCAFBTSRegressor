@@ -214,22 +214,37 @@ SEED-VIG channel subsets: `all`=0–16, `temporal`=0–5, `forehead`=0–3.
 ## 13. File Map
 
 ```
-config.py              ← PATH ONLY FILE (edit for new environments)
+Core Engine
 sca_fbts_fast.py       ← MAIN ENGINE (use this; supports X_eog_extra for fusion)
+sca_fbts_regressor.py  ← Reference implementation (per-epoch, for debugging)
+sca_fbts_torch.py      ← GPU-accelerated (experimental)
+
+Data Layer
+config.py              ← PATH ONLY FILE (edit for new environments)
+data_loader.py         ← SEED-VIG data
+drozy_loader.py        ← DROZY data
+utils.py               ← COR/RMSE/MAE + splits
+
+Main Experiment Scripts
 run_all.py             ← ORCHESTRATOR (one-click everything)
 run_fusion.py          ← FUSION + METRIC ABLATION (Tables 2-3)
 run_loso.py            ← CROSS-SUBJECT (Table 4)
 run_binary.py          ← ALERT vs DROWSY
-data_loader.py         ← SEED-VIG data
-drozy_loader.py        ← DROZY data
-utils.py               ← COR/RMSE/MAE + splits
-precompute_figures.py  ← Figure data precomputation (replaces _compute_figures.py)
+run_final.py           ← Within-subject regression (Table 1)
+run_seed_fast.py       ← SEED cross-task baseline
+run_seed_fbts.py       ← SEED FBTS evaluation (10-channel subset)
+run_experiment.py      ← Riemannian metric ablation (basic)
+run_parallel.py        ← Torch + Joblib parallel benchmark
+
+Post-processing
+precompute_figures.py  ← Figure data precomputation
 generate_figures.py    ← PAPER FIGURES (from cache, PNG output)
+
 paper/                 ← Paper LaTeX source + figures + compiled PDF
 results/               ← Experiment result JSONs
-SKILL.md               ← PROJECT SKILL (human reference)
-README.md              ← PROJECT README (Chinese)
-doc/DATASETS.md        ← DATASET SPECS
+
+doc/                   ← Dataset specs and project understanding
+temp_archive/           ← Ablation scripts (run with --skip-extra to skip)
 ```
 
 ---

@@ -46,7 +46,7 @@ BAND_LABELS = ['Delta', 'Theta', 'Alpha', 'Beta', 'Gamma']
 def draw_prediction_curves():
     """从 cors_data.npz 加载，画最佳/中位/最差被试预测曲线。"""
     print("Drawing prediction curves...")
-    data = np.load(os.path.join(CACHE, 'cors_data.npz'))
+    data = np.load(os.path.join(CACHE, 'cors_data.npz'), allow_pickle=True)
     subjects = data['subjects']
     cors = data['cors']
     y_true_all = data['y_true']
@@ -64,8 +64,8 @@ def draw_prediction_curves():
 
     fig, axes = plt.subplots(3, 1, figsize=(10, 12), sharex=True)
     for ax, (idx, label, color) in zip(axes, selected):
-        y_t = y_true_all[idx]
-        y_p = y_pred_all[idx]
+        y_t = np.asarray(y_true_all[idx], dtype=float)
+        y_p = np.asarray(y_pred_all[idx], dtype=float)
         y_p_smooth = uniform_filter1d(y_p, size=3)
         c_val = cors[idx]
 
@@ -94,9 +94,9 @@ def draw_prediction_curves():
 def draw_scatter():
     """全局真值 vs 预测值散点图 (所有被试拼接，含回归线)。"""
     print("Drawing scatter plot...")
-    data = np.load(os.path.join(CACHE, 'cors_data.npz'))
-    yt_all = data['y_true'].ravel()
-    yp_all = data['y_pred'].ravel()
+    data = np.load(os.path.join(CACHE, 'cors_data.npz'), allow_pickle=True)
+    yt_all = np.concatenate([np.asarray(arr, dtype=float) for arr in data['y_true']])
+    yp_all = np.concatenate([np.asarray(arr, dtype=float) for arr in data['y_pred']])
 
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.scatter(yt_all, yp_all, s=1, alpha=0.3, c='steelblue', rasterized=True)
@@ -128,7 +128,7 @@ def draw_scatter():
 def draw_heatmap():
     """从 heatmap_data.npz 加载，画通道×频段 DE 特征热力图。"""
     print("Drawing heatmap...")
-    data = np.load(os.path.join(CACHE, 'heatmap_data.npz'))
+    data = np.load(os.path.join(CACHE, 'heatmap_data.npz'), allow_pickle=True)
     de_alert = data['de_alert']
     de_drowsy = data['de_drowsy']
     de_diff = de_drowsy - de_alert
@@ -228,7 +228,7 @@ def compute_statistical_tests():
 def draw_ablation():
     """从 ablation_data.npz 加载，画 n_features vs COR 误差棒图。"""
     print("Drawing feature ablation...")
-    data = np.load(os.path.join(CACHE, 'ablation_data.npz'))
+    data = np.load(os.path.join(CACHE, 'ablation_data.npz'), allow_pickle=True)
     labels = data['labels']
     means = data['means']
     stds = data['stds']
@@ -329,7 +329,6 @@ def draw_fbts_connectivity():
     imp = data['importance']
     bp = data['band_pct']
     band_names = data['band_names']
-    ch_names = data['ch_names']
 
     fig, axes = plt.subplots(2, 3, figsize=(18, 11))
     axes = axes.flatten()
@@ -337,8 +336,8 @@ def draw_fbts_connectivity():
         ax = axes[bi]
         mat_sym = (imp[bi] + imp[bi].T) / 2
         im = ax.imshow(mat_sym, aspect='equal', cmap='YlOrRd', interpolation='nearest', vmin=0)
-        ax.set_xticks(range(17)); ax.set_xticklabels(ch_names, rotation=90, fontsize=6)
-        ax.set_yticks(range(17)); ax.set_yticklabels(ch_names, fontsize=6)
+        ax.set_xticks(range(17)); ax.set_xticklabels(CH_NAMES, rotation=90, fontsize=6)
+        ax.set_yticks(range(17)); ax.set_yticklabels(CH_NAMES, fontsize=6)
         ax.set_title(f'{band_names[bi]} ({bp[bi]:.1f}%)', fontsize=12)
         plt.colorbar(im, ax=ax, shrink=0.8, label='Selection freq.')
     ax = axes[5]

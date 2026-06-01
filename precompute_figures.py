@@ -140,7 +140,7 @@ def compute_fbts_connectivity():
                 bi = int(g // band_dim)
                 pi = int(g % band_dim)
                 # pi → (i,j) upper-triangular index
-                i = int(np.floor((2*n_ch - 1 - np.sqrt((2*n_ch-1)**2 - 8*pi)) / 2))
+                i = int(np.floor((2*n_ch + 1 - np.sqrt((2*n_ch+1)**2 - 8*pi)) / 2))
                 j = int(pi - i * n_ch + i * (i - 1) // 2 + i)
                 if bi < n_bands and 0 <= i < n_ch and 0 <= j < n_ch:
                     accum[bi, i, j] += 1.0
@@ -159,7 +159,7 @@ def compute_fbts_connectivity():
              importance=accum, band_pct=bp,
              band_names=np.array(BAND_NAMES_5, dtype=object),
              ch_names=np.array(['FT7','FT8','T7','T8','TP7','TP8',
-                                'CP1','CPZ','CP2','P1','PZ','P2',
+                                'CP1','CP2','P1','PZ','P2',
                                 'PO3','POZ','PO4','O1','OZ','O2'], dtype=object))
     print(f"  Saved fbts_connectivity.npz")
 

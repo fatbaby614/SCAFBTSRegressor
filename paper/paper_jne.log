@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.8)  21 MAY 2026 13:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.12.8)  1 JUN 2026 11:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -287,7 +287,8 @@ Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
 File: l3backend-pdftex.def 2024-05-08 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count299
 \l__pdf_internal_box=\box54
-) (./paper_jne.aux)
+)
+No file paper_jne.aux.
 \openout1 = `paper_jne.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 10.
@@ -308,7 +309,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 10.
 LaTeX Font Info:    ... okay on input line 10.
- (d:/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+(d:/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count300
 \scratchdimen=\dimen171
@@ -352,249 +353,14 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 16.
  (d:/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<orcid.pdf, id=5, 24.96628pt x 25.18509pt>
-File: orcid.pdf Graphic file (type pdf)
-<use orcid.pdf>
-Package pdftex.def Info: orcid.pdf  used on input line 16.
-(pdftex.def)             Requested size: 8.0pt x 8.07014pt.
-File: orcid.pdf Graphic file (type pdf)
-<use orcid.pdf>
-Package pdftex.def Info: orcid.pdf  used on input line 16.
-(pdftex.def)             Requested size: 8.0pt x 8.07014pt.
-File: orcid.pdf Graphic file (type pdf)
-<use orcid.pdf>
-Package pdftex.def Info: orcid.pdf  used on input line 16.
-(pdftex.def)             Requested size: 8.0pt x 8.07014pt.
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 32.
 
-
-LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 32.
-
-
-LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
-(Font)              size <5> substituted on input line 32.
-
-
-LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 32.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 1 undefined on input line 41.
-
-
-LaTeX Warning: Citation `barger2006impact' on page 1 undefined on input line 41.
-
-
-LaTeX Warning: Citation `shi2013differential' on page 1 undefined on input line 41.
-
-
-LaTeX Warning: Citation `lin2014wireless' on page 1 undefined on input line 41.
-
-
-LaTeX Warning: Citation `lyznicki1998sleepiness' on page 1 undefined on input line 45.
-
-
-LaTeX Warning: Citation `zhang2022eegbased' on page 1 undefined on input line 45.
-
-
-LaTeX Warning: Citation `rosenberg2016neuromarker' on page 1 undefined on input line 45.
-
-
-LaTeX Warning: Citation `littner2005practice' on page 1 undefined on input line 45.
-
-
-LaTeX Warning: Citation `kaiser2022wearable' on page 1 undefined on input line 45.
-
-
-
-[1{d:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
-
- <./orcid.pdf>]
-
-LaTeX Warning: Citation `olbrich2012eeg' on page 2 undefined on input line 47.
-
-
-LaTeX Warning: Citation `tagliazucchi2014large' on page 2 undefined on input line 47.
-
-
-LaTeX Warning: Citation `strijkstra2003subjective' on page 2 undefined on input line 47.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 2 undefined on input line 49.
-
-
-LaTeX Warning: Citation `huo2016driving' on page 2 undefined on input line 49.
-
-
-LaTeX Warning: Citation `duan2013differential' on page 2 undefined on input line 49.
-
-
-LaTeX Warning: Citation `shi2013differential' on page 2 undefined on input line 49.
-
-
-LaTeX Warning: Citation `congedo2017riemannian' on page 2 undefined on input line 55.
-
-
-LaTeX Warning: Citation `barachant2012multiclass' on page 2 undefined on input line 55.
-
-
-LaTeX Warning: Citation `barachant2012multiclass' on page 2 undefined on input line 55.
-
-
-LaTeX Warning: Citation `huang2022spd' on page 2 undefined on input line 57.
-
-
-LaTeX Warning: Citation `xu2023riemannian' on page 2 undefined on input line 57.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 2 undefined on input line 57.
-
-
-
-[2]
-
-LaTeX Warning: Citation `tagliazucchi2014large' on page 3 undefined on input line 79.
-
-
-LaTeX Warning: Citation `strijkstra2003subjective' on page 3 undefined on input line 79.
-
-
-LaTeX Warning: Citation `olbrich2012eeg' on page 3 undefined on input line 79.
-
-
-LaTeX Warning: Citation `tagliazucchi2014large' on page 3 undefined on input line 79.
-
-
-LaTeX Warning: Citation `chen2010shrinkage' on page 3 undefined on input line 81.
-
-
-LaTeX Warning: Citation `barachant2012multiclass' on page 3 undefined on input line 85.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 3 undefined on input line 87.
-
-
-LaTeX Warning: Citation `chen2010shrinkage' on page 3 undefined on input line 93.
-
-
-
-[3]
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 113.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 121.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 131.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 131.
-
-
-
-[4{d:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-
-LaTeX Warning: Reference `tab:single' on page 5 undefined on input line 168.
-
-
-LaTeX Warning: Citation `shi2013differential' on page 5 undefined on input line 168.
-
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 5 undefined on input line 170.
-
-<figures/fig_cor_distribution.png, id=77, 705.837pt x 424.2249pt>
-File: figures/fig_cor_distribution.png Graphic file (type png)
-<use figures/fig_cor_distribution.png>
-Package pdftex.def Info: figures/fig_cor_distribution.png  used on input line 197.
-(pdftex.def)             Requested size: 413.55946pt x 248.56218pt.
-
-LaTeX Warning: Reference `tab:fusion' on page 5 undefined on input line 202.
-
-
-
-[5]
-
-LaTeX Warning: Citation `zheng2017multimodal' on page 6 undefined on input line 204.
-
-
-LaTeX Warning: Reference `tab:binary' on page 6 undefined on input line 241.
-
-
-LaTeX Warning: Citation `kartsch2018sleep' on page 6 undefined on input line 241.
-
-
-
-[6 <./figures/fig_cor_distribution.png>]
-<figures/fig_heatmap.png, id=97, 991.3035pt x 356.2911pt>
-File: figures/fig_heatmap.png Graphic file (type png)
-<use figures/fig_heatmap.png>
-Package pdftex.def Info: figures/fig_heatmap.png  used on input line 245.
-(pdftex.def)             Requested size: 370.03073pt x 132.99449pt.
-
-
-LaTeX Warning: Citation `olbrich2012eeg' on page 7 undefined on input line 246.
-
-
-LaTeX Warning: Citation `strijkstra2003subjective' on page 7 undefined on input line 246.
-
-
-LaTeX Warning: Citation `olbrich2012eeg' on page 7 undefined on input line 246.
-
-
-LaTeX Warning: Citation `strijkstra2003subjective' on page 7 undefined on input line 246.
-
-
-LaTeX Warning: Reference `tab:loso' on page 7 undefined on input line 276.
-
-
-LaTeX Warning: Citation `zanini2018transfer' on page 7 undefined on input line 276.
-
-
-LaTeX Warning: Citation `zanini2018transfer' on page 7 undefined on input line 276.
-
-
-
-[7 <./figures/fig_heatmap.png>]
-
-LaTeX Warning: Citation `zheng2015investigating' on page 8 undefined on input line 280.
-
-
-LaTeX Warning: Citation `massoz2016drozy' on page 8 undefined on input line 284.
-
-
-LaTeX Warning: Reference `tab:drozy' on page 8 undefined on input line 301.
-
-
-
-[8]
-
-LaTeX Warning: Citation `pyriemann' on page 9 undefined on input line 320.
-
-<figures/fig_prediction_curves.png, id=117, 713.064pt x 860.7357pt>
-File: figures/fig_prediction_curves.png Graphic file (type png)
-<use figures/fig_prediction_curves.png>
-Package pdftex.def Info: figures/fig_prediction_curves.png  used on input line 324.
-(pdftex.def)             Requested size: 413.55946pt x 499.22705pt.
-<figures/fig_scatter.png, id=118, 414.8298pt x 424.2249pt>
-File: figures/fig_scatter.png Graphic file (type png)
-<use figures/fig_scatter.png>
-Package pdftex.def Info: figures/fig_scatter.png  used on input line 331.
-(pdftex.def)             Requested size: 239.43126pt x 244.85307pt.
-<figures/fig_ablation_nfeatures.png, id=119, 476.0184pt x 352.1958pt>
-File: figures/fig_ablation_nfeatures.png Graphic file (type png)
-<use figures/fig_ablation_nfeatures.png>
-Package pdftex.def Info: figures/fig_ablation_nfeatures.png  used on input line 338.
-(pdftex.def)             Requested size: 370.03073pt x 273.78728pt.
-
-d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex:345: LaTeX Error: File `fig_fbts_connectivity' not found.
+d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex:16: LaTeX Error: File `orcid' not found.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.345 ...th=0.95\textwidth]{fig_fbts_connectivity}
+l.16 ...1373}\textsuperscript{\textbf{[TO FILL]}}}
                                                   
 I could not locate the file with any of these extensions:
 .pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps
@@ -602,65 +368,320 @@ Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-LaTeX Warning: Citation `zheng2017multimodal' on page 9 undefined on input line 358.
+d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex:16: LaTeX Error: File `orcid' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16 ...1373}\textsuperscript{\textbf{[TO FILL]}}}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
 
-LaTeX Warning: Citation `zanini2018transfer' on page 9 undefined on input line 362.
+d:/THWork/SCAFBTSRegressor/paper/paper_jne.tex:16: LaTeX Error: File `orcid' not found.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.16 ...1373}\textsuperscript{\textbf{[TO FILL]}}}
+                                                  
+I could not locate the file with any of these extensions:
+.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 33.
+
+LaTeX Font Warning: Font shape `OT1/cmr/m/n' in size <5.5> not available
+(Font)              size <5> substituted on input line 33.
 
 
-LaTeX Warning: Reference `tab:loso' on page 9 undefined on input line 362.
+LaTeX Font Warning: Font shape `OML/cmm/m/it' in size <5.5> not available
+(Font)              size <5> substituted on input line 33.
+
+
+LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <5.5> not available
+(Font)              size <5> substituted on input line 33.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 1 undefined on input line 42.
+
+
+LaTeX Warning: Citation `barger2006impact' on page 1 undefined on input line 42.
+
+
+LaTeX Warning: Citation `shi2013differential' on page 1 undefined on input line 42.
+
+
+LaTeX Warning: Citation `lin2014wireless' on page 1 undefined on input line 42.
+
+
+LaTeX Warning: Citation `lyznicki1998sleepiness' on page 1 undefined on input line 46.
+
+
+LaTeX Warning: Citation `zhang2022eegbased' on page 1 undefined on input line 46.
+
+
+LaTeX Warning: Citation `rosenberg2016neuromarker' on page 1 undefined on input line 46.
+
+
+LaTeX Warning: Citation `littner2005practice' on page 1 undefined on input line 46.
+
+
+LaTeX Warning: Citation `kaiser2022wearable' on page 1 undefined on input line 46.
+
+
+
+[1{d:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+]
+
+LaTeX Warning: Citation `olbrich2012eeg' on page 2 undefined on input line 48.
+
+
+LaTeX Warning: Citation `tagliazucchi2014large' on page 2 undefined on input line 48.
+
+
+LaTeX Warning: Citation `strijkstra2003subjective' on page 2 undefined on input line 48.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 2 undefined on input line 50.
+
+
+LaTeX Warning: Citation `huo2016driving' on page 2 undefined on input line 50.
+
+
+LaTeX Warning: Citation `duan2013differential' on page 2 undefined on input line 50.
+
+
+LaTeX Warning: Citation `shi2013differential' on page 2 undefined on input line 50.
+
+
+LaTeX Warning: Citation `congedo2017riemannian' on page 2 undefined on input line 56.
+
+
+LaTeX Warning: Citation `barachant2012multiclass' on page 2 undefined on input line 56.
+
+
+LaTeX Warning: Citation `barachant2012multiclass' on page 2 undefined on input line 56.
+
+
+LaTeX Warning: Citation `yger2017riemannian' on page 2 undefined on input line 58.
+
+
+LaTeX Warning: Citation `lotte2018review' on page 2 undefined on input line 58.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 2 undefined on input line 58.
+
+
+
+[2]
+
+LaTeX Warning: Citation `tagliazucchi2014large' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Citation `strijkstra2003subjective' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Citation `olbrich2012eeg' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Citation `tagliazucchi2014large' on page 3 undefined on input line 80.
+
+
+LaTeX Warning: Citation `chen2010shrinkage' on page 3 undefined on input line 82.
+
+
+LaTeX Warning: Citation `barachant2012multiclass' on page 3 undefined on input line 86.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 3 undefined on input line 88.
+
+
+LaTeX Warning: Citation `chen2010shrinkage' on page 3 undefined on input line 94.
+
+
+
+[3]
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 114.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 122.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 132.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 4 undefined on input line 132.
+
+
+
+[4{d:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+
+LaTeX Warning: Reference `tab:single' on page 5 undefined on input line 169.
+
+
+LaTeX Warning: Citation `shi2013differential' on page 5 undefined on input line 169.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 5 undefined on input line 171.
+
+<figures/fig_cor_distribution.png, id=71, 706.0779pt x 424.2249pt>
+File: figures/fig_cor_distribution.png Graphic file (type png)
+<use figures/fig_cor_distribution.png>
+Package pdftex.def Info: figures/fig_cor_distribution.png  used on input line 198.
+(pdftex.def)             Requested size: 413.55946pt x 248.47803pt.
+
+LaTeX Warning: Reference `tab:fusion' on page 5 undefined on input line 203.
+
+
+LaTeX Warning: Citation `zheng2017multimodal' on page 5 undefined on input line 205.
+
+
+
+[5]
+
+[6 <./figures/fig_cor_distribution.png>]
+
+LaTeX Warning: Reference `tab:binary' on page 7 undefined on input line 242.
+
+
+LaTeX Warning: Citation `kartsch2018sleep' on page 7 undefined on input line 242.
+
+<figures/fig_heatmap.png, id=89, 991.3035pt x 356.2911pt>
+File: figures/fig_heatmap.png Graphic file (type png)
+<use figures/fig_heatmap.png>
+Package pdftex.def Info: figures/fig_heatmap.png  used on input line 246.
+(pdftex.def)             Requested size: 370.03073pt x 132.99449pt.
+
+LaTeX Warning: Citation `olbrich2012eeg' on page 7 undefined on input line 247.
+
+
+LaTeX Warning: Citation `strijkstra2003subjective' on page 7 undefined on input line 247.
+
+
+LaTeX Warning: Citation `olbrich2012eeg' on page 7 undefined on input line 247.
+
+
+LaTeX Warning: Citation `strijkstra2003subjective' on page 7 undefined on input line 247.
+
+
+LaTeX Warning: Reference `tab:loso' on page 7 undefined on input line 277.
+
+
+LaTeX Warning: Citation `zanini2018transfer' on page 7 undefined on input line 277.
+
+
+LaTeX Warning: Citation `zanini2018transfer' on page 7 undefined on input line 277.
+
+
+
+[7]
+
+LaTeX Warning: Citation `zheng2015investigating' on page 8 undefined on input line 281.
+
+
+LaTeX Warning: Citation `massoz2016drozy' on page 8 undefined on input line 285.
+
+
+
+[8 <./figures/fig_heatmap.png>]
+
+LaTeX Warning: Reference `tab:drozy' on page 9 undefined on input line 302.
 
 
 
 [9]
 
-[10 <./figures/fig_prediction_curves.png>]
+LaTeX Warning: Citation `pyriemann' on page 10 undefined on input line 321.
 
-[11 <./figures/fig_scatter.png> <./figures/fig_ablation_nfeatures.png>]
+<figures/fig_prediction_curves.png, id=115, 713.3049pt x 860.7357pt>
+File: figures/fig_prediction_curves.png Graphic file (type png)
+<use figures/fig_prediction_curves.png>
+Package pdftex.def Info: figures/fig_prediction_curves.png  used on input line 325.
+(pdftex.def)             Requested size: 413.55946pt x 499.04318pt.
+<figures/fig_scatter.png, id=116, 491.436pt x 424.2249pt>
+File: figures/fig_scatter.png Graphic file (type png)
+<use figures/fig_scatter.png>
+Package pdftex.def Info: figures/fig_scatter.png  used on input line 332.
+(pdftex.def)             Requested size: 239.43126pt x 206.68742pt.
+<figures/fig_ablation_nfeatures.png, id=117, 476.2593pt x 352.1958pt>
+File: figures/fig_ablation_nfeatures.png Graphic file (type png)
+<use figures/fig_ablation_nfeatures.png>
+Package pdftex.def Info: figures/fig_ablation_nfeatures.png  used on input line 339.
+(pdftex.def)             Requested size: 370.03073pt x 273.64218pt.
+<figures/fig_fbts_connectivity.png, id=118, 1281.8289pt x 781.2387pt>
+File: figures/fig_fbts_connectivity.png Graphic file (type png)
+<use figures/fig_fbts_connectivity.png>
+Package pdftex.def Info: figures/fig_fbts_connectivity.png  used on input line 346.
+(pdftex.def)             Requested size: 413.55946pt x 252.05185pt.
 
-LaTeX Warning: Citation `zhang2022eegbased' on page 12 undefined on input line 372.
-
-
-LaTeX Warning: Citation `dimitriadis2021functional' on page 12 undefined on input line 372.
-
-
-LaTeX Warning: Citation `kaida2006validation' on page 12 undefined on input line 374.
-
-
-LaTeX Warning: Citation `littner2005practice' on page 12 undefined on input line 374.
-
-
-LaTeX Warning: Citation `kaida2006validation' on page 12 undefined on input line 376.
-
-
-LaTeX Warning: Citation `babiloni2020international' on page 12 undefined on input line 376.
-
-
-LaTeX Warning: Citation `zhang2015forehead' on page 12 undefined on input line 382.
-
-
-
-[12]
-
-LaTeX Warning: Citation `zanini2018transfer' on page 13 undefined on input line 386.
+LaTeX Warning: Citation `zheng2017multimodal' on page 10 undefined on input line 359.
 
 
-LaTeX Warning: Citation `zhang2016continuous' on page 13 undefined on input line 386.
+LaTeX Warning: Citation `zanini2018transfer' on page 10 undefined on input line 363.
 
 
-LaTeX Warning: Citation `li2023transformer' on page 13 undefined on input line 386.
+LaTeX Warning: Reference `tab:loso' on page 10 undefined on input line 363.
 
 
-LaTeX Warning: Citation `wang2024selfsupervised' on page 13 undefined on input line 386.
-
-
-LaTeX Warning: Reference `tab:drozy' on page 13 undefined on input line 386.
+LaTeX Warning: Reference `tab:single' on page 10 undefined on input line 367.
 
 
 
-[13] (./paper_jne.bbl)
+[10]
 
-[14] (./paper_jne.aux)
+[11 <./figures/fig_prediction_curves.png>]
+
+[12 <./figures/fig_scatter.png> <./figures/fig_ablation_nfeatures.png>]
+
+LaTeX Warning: Citation `zhang2022eegbased' on page 13 undefined on input line 375.
+
+
+LaTeX Warning: Citation `dimitriadis2021functional' on page 13 undefined on input line 375.
+
+
+LaTeX Warning: Citation `kaida2006validation' on page 13 undefined on input line 377.
+
+
+LaTeX Warning: Citation `littner2005practice' on page 13 undefined on input line 377.
+
+
+LaTeX Warning: Citation `kaida2006validation' on page 13 undefined on input line 379.
+
+
+LaTeX Warning: Citation `babiloni2020international' on page 13 undefined on input line 379.
+
+
+
+[13 <./figures/fig_fbts_connectivity.png>]
+
+LaTeX Warning: Citation `zhang2015forehead' on page 14 undefined on input line 385.
+
+
+LaTeX Warning: Citation `zanini2018transfer' on page 14 undefined on input line 389.
+
+
+LaTeX Warning: Citation `zhang2016continuous' on page 14 undefined on input line 389.
+
+
+LaTeX Warning: Citation `pan2024dcat' on page 14 undefined on input line 389.
+
+
+LaTeX Warning: Citation `wang2024selfsupervised' on page 14 undefined on input line 389.
+
+
+
+[14] (./paper_jne.bbl)
+
+[15] (./paper_jne.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
@@ -686,18 +707,18 @@ Package rerunfilecheck Info: Checksums for `paper_jne.out':
 (rerunfilecheck)             After:  EC754C2309603D637F4CC7A85AE44758;5333.
  ) 
 Here is how much of TeX's memory you used:
- 10895 strings out of 473189
- 166360 string characters out of 5719958
- 584643 words of memory out of 5000000
- 33938 multiletter control sequences out of 15000+600000
+ 10896 strings out of 473189
+ 166108 string characters out of 5719958
+ 583652 words of memory out of 5000000
+ 33940 multiletter control sequences out of 15000+600000
  571885 words of font info for 86 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,12n,93p,1927b,539s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,13n,93p,2104b,539s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><d:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on paper_jne.pdf (14 pages, 2095566 bytes).
+Output written on paper_jne.pdf (15 pages, 2650802 bytes).
 PDF statistics:
  290 PDF objects out of 1000 (max. 8388607)
- 209 compressed objects within 3 object streams
- 71 named destinations out of 1000 (max. 500000)
+ 208 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
